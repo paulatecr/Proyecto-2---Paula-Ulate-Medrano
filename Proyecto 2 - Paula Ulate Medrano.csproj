@@ -132,7 +132,7 @@
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\EspecieRepository.cs" />
-    <Compile Include="Repositorios\ReporteprogramadoRepository.cs" />
+    <Compile Include="Repositorios\ReporteProgramadoRepository.cs" />
     <Compile Include="Repositorios\SemillaRepository.cs" />
     <Compile Include="Repositorios\UbicacionRepository.cs" />
     <Compile Include="Repositorios\UsuarioRepository.cs" />

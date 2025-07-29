@@ -1,16 +1,18 @@
-﻿<!DOCTYPE html>
+﻿
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Proyecto 2 - Paula Ulate - Aplicación para Bodega de Repuestos</title>
+    <title>@ViewBag.Title - Proyecto 2 - Paula Ulate - Aplicación para Arca del Día Cero</title>
 
     @Styles.Render("~/Content/css")
     <link href="~/Content/Style.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
-
+    @using Proyecto_2___Paula_Ulate_Medrano.Models
     @{
-        //var user = Session["UsuarioLogueado"] as Proyecto2_Paula_Ulate.Models.Usuario;
+        var user = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
     }
 </head>
 <body>
@@ -50,7 +52,7 @@
                             <li>@Html.ActionLink("Cerrar sesión", "CerrarSesion", "Home", null, new { @class = "nav-link" })</li>
                         }
 
-                        
+
                     }
                 </ul>
             </div>

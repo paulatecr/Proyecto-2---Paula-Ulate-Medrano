@@ -7,7 +7,7 @@ using System.Web;
 
 namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
 {
-    public class ReporteprogramadoRepository
+    public class ReporteProgramadoRepository
     {
         private readonly string connectionString;
 

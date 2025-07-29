@@ -94,8 +94,8 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.Parameters.AddWithValue("@FechaAlmacenamiento", semilla.FechaAlmacenamiento);
                 cmd.Parameters.AddWithValue("@FechaCreacion", semilla.FechaCreacion);
                 cmd.Parameters.AddWithValue("@CreadoPor", semilla.CreadoPor);
-                cmd.Parameters.AddWithValue("@FechaModificacion", (object?)semilla.FechaModificacion ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ModificadoPor", (object?)semilla.ModificadoPor ?? DBNull.Value);
+                //cmd.Parameters.AddWithValue("@FechaModificacion", (object?)semilla.FechaModificacion ?? DBNull.Value);
+               // cmd.Parameters.AddWithValue("@ModificadoPor", (object?)semilla.ModificadoPor ?? DBNull.Value);
 
                 connection.Open();
                 cmd.ExecuteNonQuery();
@@ -122,8 +122,8 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.Parameters.AddWithValue("@UbicacionId", semilla.UbicacionId);
                 cmd.Parameters.AddWithValue("@Cantidad", semilla.Cantidad);
                 cmd.Parameters.AddWithValue("@FechaAlmacenamiento", semilla.FechaAlmacenamiento);
-                cmd.Parameters.AddWithValue("@FechaModificacion", (object?)semilla.FechaModificacion ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ModificadoPor", (object?)semilla.ModificadoPor ?? DBNull.Value);
+                //cmd.Parameters.AddWithValue("@FechaModificacion", (object?)semilla.FechaModificacion ?? DBNull.Value);
+                //cmd.Parameters.AddWithValue("@ModificadoPor", (object?)semilla.ModificadoPor ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@Id", semilla.Id);
 
                 connection.Open();

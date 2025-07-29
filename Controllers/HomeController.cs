@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Proyecto_2___Paula_Ulate_Medrano.Repositorios;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -26,5 +28,33 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 
             return View();
         }
+
+        [HttpPost]
+        public ActionResult Login(string usuario, string contrasena)
+        {
+            var repo = new UsuarioRepository(ConfigurationManager.ConnectionStrings["ConexionBaseDatos"].ConnectionString);
+            var usuarios = repo.GetAll();
+            var user = usuarios.FirstOrDefault(u => u.UserID == usuario && u.ContrasenaHash == contrasena);
+
+            if (user != null)
+            {
+                Session["UsuarioLogueado"] = user;
+                return RedirectToAction("Perfil", "Usuario");
+            }
+            else
+            {
+                ViewBag.Mensaje = "Credenciales incorrectas.";
+                return View("Index");
+            }
+        }
+
+        public ActionResult CerrarSesion()
+        {
+            Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
     }
 }
