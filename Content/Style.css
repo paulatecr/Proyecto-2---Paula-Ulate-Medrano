@@ -1,0 +1,240 @@
+﻿/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+
+.navbar {
+    background-color: mediumpurple;
+    padding: 15px 30px;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    gap: 40px;
+}
+
+.menu-navbar {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+    .nav-link:hover {
+        text-decoration: underline;
+    }
+
+.titulo-navbar {
+    font-size: 20px;
+    font-weight: bold;
+    /*color: white;*/
+}
+
+.h1-Index {
+    font-size: 32px;
+    font-weight: bold;
+    color: #4A148C;
+    text-align: center;
+}
+
+
+input, select, textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.form-container {
+    margin: 40px auto;
+    width: 400px;
+    padding: 20px;
+    border: 2px solid #00bcd4;
+    border-radius: 15px;
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+    width: 100%;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #4A148C;
+    text-align: center;
+    text-shadow: 1px 1px 2px #ccc;
+    border-bottom: 2px solid #4A148C;
+    padding-bottom: 10px;
+}
+
+.form-container h4 {
+    width: 100%;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #4A148C;
+    text-align: center;
+    text-shadow: 1px 1px 2px #ccc;
+    border-bottom: 2px solid #4A148C;
+    padding-bottom: 10px;
+}
+
+.form-container label {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.form-row-inline {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+    .form-row-inline label {
+        width: 80px; 
+        font-weight: bold;
+        margin-right: 0px;
+    }
+
+    .form-row-inline p {
+        margin: 0;
+        color: #444; 
+    }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+}
+
+input, select {
+    display: block;
+    margin: 5px 0px 15px 5px;
+    padding: 5px;
+    width: 350px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.button {
+    padding: 8px 16px;
+    background-color: #4A148C;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#datoTabla {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 2px solid #00bcd4;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    table-layout: auto;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #808080;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #e0e0e0;
+    font-weight: bold;
+
+}
+
+td {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+    td.descripcion-columna {
+        text-align: left;
+        white-space: normal;
+        min-width: 400px;
+        max-width: 500px;
+        word-wrap: break-word;
+    }
+
+    td.nombreRepuesto-columna {
+        text-align: left;
+        white-space: normal;
+        min-width: 150px;
+        max-width: 300px;
+        word-wrap: break-word;
+    }
+
+    td.ingresarCantidad-columna {
+        text-align: left;
+        white-space: normal;
+        min-width: 50px;
+        max-width: 100px;
+        word-wrap: break-word;
+    }
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+}
+
+.modal-contenido {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 400px;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+    .modal-contenido h3 {
+        margin-bottom: 10px;
+        color: #4A148C;
+    }
+
+.modal .button {
+    margin: 0 10px;
+}
+
+.nueva-notificacion {
+    background-color: #f3e9ff;
+}

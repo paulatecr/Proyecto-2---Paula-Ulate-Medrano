@@ -3,32 +3,65 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title - Proyecto 2 - Paula Ulate - Aplicación para Bodega de Repuestos</title>
+
     @Styles.Render("~/Content/css")
+    <link href="~/Content/Style.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
+
+    @{
+        //var user = Session["UsuarioLogueado"] as Proyecto2_Paula_Ulate.Models.Usuario;
+    }
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
+    <header>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <span class="titulo-navbar">Proyecto 2 - Paula Ulate</span>
+
+                <ul class="menu-navbar">
+                    @if (user == null)
+                    {
+                        <li>@Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Contacto", "Contact", "Home", null, new { @class = "nav-link" })</li>
+                    }
+                    else
+                    {
+                        if (user.Rol == "Administrador")
+                        {
+                            <li>@Html.ActionLink("Usuarios Existentes", "Index", "Usuario", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Repuestos", "Index", "Repuesto", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Registrar Entrada", "RegistrarEntrada", "Repuesto", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Solicitudes", "Index", "Solicitud", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Entregas", "Index", "Entrega", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Perfil Usuario", "Perfil", "Usuario", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Cerrar sesión", "CerrarSesion", "Home", null, new { @class = "nav-link" })</li>
+                        }
+
+                        if (user.Rol == "Usuario")
+                        {
+                            <li>@Html.ActionLink("Registrar Entrada", "RegistrarEntrada", "Repuesto", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Repuestos", "Index", "Repuesto", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Solicitudes", "Index", "Solicitud", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Entregas", "Index", "Entrega", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Perfil Usuario", "Perfil", "Usuario", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Notificaciones", "Index", "Notificacion", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Cerrar sesión", "CerrarSesion", "Home", null, new { @class = "nav-link" })</li>
+                        }
+
+                        
+                    }
                 </ul>
             </div>
-        </div>
-    </nav>
-    <div class="container body-content">
+        </nav>
+    </header>
+
+    <div class="container mt-4">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - Proyecto 2 - Paula Ulate</p>
         </footer>
     </div>
 
@@ -37,3 +70,4 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+
