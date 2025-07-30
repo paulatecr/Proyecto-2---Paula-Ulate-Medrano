@@ -30,9 +30,10 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                     usuarios.Add(new Usuario
                     {
                         Id = (int)reader["Id"],
+                        UserID = reader["UserID"].ToString(),
                         Nombre = reader["Nombre"].ToString(),
                         Correo = reader["Correo"].ToString(),
-                        ContrasenaHash = reader["ContrasenaHash"].ToString(),
+                        Contrasena = reader["Contrasena"].ToString(),
                         Rol = reader["Rol"].ToString(),
                         Activo = (bool)reader["Activo"]
                     });
@@ -56,9 +57,10 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                     usuario = new Usuario
                     {
                         Id = (int)reader["Id"],
+                        UserID = reader["UserID"].ToString(),
                         Nombre = reader["Nombre"].ToString(),
                         Correo = reader["Correo"].ToString(),
-                        ContrasenaHash = reader["ContrasenaHash"].ToString(),
+                        Contrasena = reader["Contrasena"].ToString(),
                         Rol = reader["Rol"].ToString(),
                         Activo = (bool)reader["Activo"]
                     };
@@ -83,8 +85,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                     {
                         Id = (int)reader["Id"],
                         Nombre = reader["Nombre"].ToString(),
+                        UserID = reader["UserID"].ToString(),
                         Correo = reader["Correo"].ToString(),
-                        ContrasenaHash = reader["ContrasenaHash"].ToString(),
+                        Contrasena = reader["Contrasena"].ToString(),
                         Rol = reader["Rol"].ToString(),
                         Activo = (bool)reader["Activo"]
                     };
@@ -101,8 +104,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                              VALUES (@Nombre, @Correo, @ContrasenaHash, @Rol, @Activo)";
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
+                cmd.Parameters.AddWithValue("@UserID", usuario.UserID);
                 cmd.Parameters.AddWithValue("@Correo", usuario.Correo);
-                cmd.Parameters.AddWithValue("@ContrasenaHash", usuario.ContrasenaHash);
+                cmd.Parameters.AddWithValue("@Contrasena", usuario.Contrasena);
                 cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
                 cmd.Parameters.AddWithValue("@Activo", usuario.Activo);
                 connection.Open();
@@ -120,8 +124,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                              WHERE Id = @Id";
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
+                cmd.Parameters.AddWithValue("@UserID", usuario.UserID);
                 cmd.Parameters.AddWithValue("@Correo", usuario.Correo);
-                cmd.Parameters.AddWithValue("@ContrasenaHash", usuario.ContrasenaHash);
+                cmd.Parameters.AddWithValue("@Contrasena", usuario.Contrasena);
                 cmd.Parameters.AddWithValue("@Rol", usuario.Rol);
                 cmd.Parameters.AddWithValue("@Activo", usuario.Activo);
                 cmd.Parameters.AddWithValue("@Id", usuario.Id);

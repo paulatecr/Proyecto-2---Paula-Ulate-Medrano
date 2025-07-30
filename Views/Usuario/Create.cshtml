@@ -1,0 +1,37 @@
+﻿
+@model Proyecto_2___Paula_Ulate_Medrano.Models.Usuario
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm("Create", "Usuario", FormMethod.Post))
+{
+    <div class="form-container">
+        <h1>Crear Usuario</h1>
+        <label for="UserId">Identificador:</label>
+        @Html.TextBoxFor(m => m.UserID, new { required = "required" })
+
+        <label for="Nombre">Nombre:</label>
+        @Html.TextBoxFor(m => m.Nombre, new { required = "required" })
+
+        <label for="Correo">Correo:</label>
+        @Html.TextBoxFor(m => m.Correo, new { required = "required", type = "email" })
+
+        <label for="Contrasena">Contraseña:</label>
+        @Html.PasswordFor(m => m.Contrasena, new { required = "required" })
+
+        <label for="Rol">Rol:</label>
+        @Html.DropDownListFor(m => m.Rol,
+            new SelectList(new[] {
+                new { Value = "Administrador", Text = "Administrador" },
+                new { Value = "Usuario", Text = "Usuario" },
+            }, "Value", "Text"),
+            "-- Seleccione un rol --",
+            new { @class = "form-control", required = "required" })
+
+        <div class="button-container">
+            <button type="submit" class="button">Registrar</button>
+        </div>
+    </div>
+}

@@ -34,7 +34,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         {
             var repo = new UsuarioRepository(ConfigurationManager.ConnectionStrings["ConexionBaseDatos"].ConnectionString);
             var usuarios = repo.GetAll();
-            var user = usuarios.FirstOrDefault(u => u.UserID == usuario && u.ContrasenaHash == contrasena);
+            var user = usuarios.FirstOrDefault(u => u.UserID == usuario && u.Contrasena == contrasena);
 
             if (user != null)
             {
