@@ -1,6 +1,9 @@
 ﻿/* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 
+
+
+
 .navbar {
     background-color: #2e7d32;
     padding: 15px 30px;
@@ -42,6 +45,30 @@
     font-weight: bold;
     color: #1B5E20;
     text-align: center;
+}
+
+.h1-Main {
+    font-size: 32px;
+    color: #1B5E20;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+.h2-Main {
+    font-size: 24px;
+    color: #1B5E20;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.p-Main {
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 
@@ -238,3 +265,6 @@ td {
 .nueva-notificacion {
     background-color: #e8f5e9;
 }
+
+
+
