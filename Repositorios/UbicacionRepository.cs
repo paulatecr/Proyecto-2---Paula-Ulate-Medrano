@@ -106,5 +106,18 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.ExecuteNonQuery();
             }
         }
+
+        private Ubicacion MapUbicacion(SqlDataReader rd)
+        {
+            return new Ubicacion
+            {
+                Id = (int)rd["Id"],
+                Nombre = rd["Nombre"].ToString(),
+                Descripcion = rd["Descripcion"]?.ToString(),
+                Condiciones = rd["Condiciones"]?.ToString()
+            };
+        }
+
+
     }
 }

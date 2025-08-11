@@ -1,0 +1,40 @@
+﻿@model Proyecto_2___Paula_Ulate_Medrano.Models.Semilla
+
+@{
+    ViewBag.Title = "Agregar Semilla";
+}
+
+<div class="form-container">
+    <h1>Agregar Semilla</h1>
+
+    @using (Html.BeginForm("Create", "Semilla", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <label for="Nombre">Nombre:</label>
+        @Html.TextBoxFor(m => m.Nombre, new { required = "required" })
+
+        <label for="EspecieId">Especie:</label>
+        @Html.DropDownListFor(m => m.EspecieId, (SelectList)ViewBag.Especies, "-- Seleccione --",
+            new { @class = "form-control", required = "required" })
+
+        <label for="UbicacionId">Ubicación:</label>
+        @Html.DropDownListFor(m => m.UbicacionId, (SelectList)ViewBag.Ubicaciones, "-- Seleccione --",
+            new { @class = "form-control", required = "required" })
+
+        <label for="Cantidad">Cantidad:</label>
+        @Html.TextBoxFor(m => m.Cantidad, new { type = "number", min = "0", required = "required" })
+
+        <label for="FechaAlmacenamiento">Fecha de Almacenamiento:</label>
+        @Html.TextBoxFor(m => m.FechaAlmacenamiento, "{0:yyyy-MM-dd}",
+            new { type = "date", required = "required" })
+
+        <div class="button-container">
+            <button type="submit" class="button">Guardar</button>
+        </div>
+
+        <div class="button-container">
+            <a href="@Url.Action("Index","Semilla")" class="button">Cancelar</a>
+        </div>
+    }
+</div>

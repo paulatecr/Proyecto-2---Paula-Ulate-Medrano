@@ -1,0 +1,26 @@
+﻿@model Proyecto_2___Paula_Ulate_Medrano.Models.Ubicacion
+@{
+    ViewBag.Title = "Agregar Ubicación";
+}
+<div class="form-container">
+    <h1>Agregar Ubicación</h1>
+    @using (Html.BeginForm("Create", "Ubicacion", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <label for="Nombre">Nombre:</label>
+        @Html.TextBoxFor(m => m.Nombre, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Nombre)
+
+        <label for="Descripcion">Descripción:</label>
+        @Html.TextAreaFor(m => m.Descripcion, new { rows = 3 })
+
+        <label for="Condiciones">Condiciones de Almacenamiento:</label>
+        @Html.TextAreaFor(m => m.Condiciones, new { rows = 3 })
+
+        <div class="button-container">
+            <button type="submit" class="button">Guardar</button>
+            <a href="@Url.Action("Index","Ubicacion")" class="button">Cancelar</a>
+        </div>
+    }
+</div>
+

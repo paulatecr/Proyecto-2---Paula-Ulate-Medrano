@@ -3,12 +3,12 @@
 @using System.Linq
 
 @{
-    ViewBag.Title = "Gestión de Semillas";
+    ViewBag.Title = "Gestión de Especies";
     var usuarioSesion = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
     bool puedeEditar = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 }
 
-<h1 class="h1-Index">Gestión de Semillas</h1>
+<h1 class="h1-Index">Gestión de Especies</h1>
 
 @if (puedeEditar)
 {

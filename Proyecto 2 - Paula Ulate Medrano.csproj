@@ -122,6 +122,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\EspecieController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SemillaController.cs" />
+    <Compile Include="Controllers\UbicacionController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -197,9 +199,16 @@
     <Content Include="Views\Especie\Index.cshtml" />
     <Content Include="Views\Especie\Create.cshtml" />
     <Content Include="Views\Especie\Edit.cshtml" />
+    <Content Include="Views\Semilla\Index.cshtml" />
+    <Content Include="Views\Semilla\Create.cshtml" />
+    <Content Include="Views\Semilla\Edit.cshtml" />
+    <Content Include="Views\Ubicacion\Index.cshtml" />
+    <Content Include="Views\Ubicacion\Create.cshtml" />
+    <Content Include="Views\Ubicacion\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

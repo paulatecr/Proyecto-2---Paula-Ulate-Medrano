@@ -6,14 +6,15 @@
     bool esAdmin = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 }
 
+
+<h1 class="h1-Index">Usuarios Registrados</h1>
+
 @if (esAdmin)
 {
     <div class="button-container" style="margin-top: 30px;">
         @Html.ActionLink("Crear Nuevo Usuario", "Create", "Usuario", null, new { @class = "button" })
     </div>
 }
-<br />
-<h1 class="h1-Index">Usuarios Registrados</h1>
 
 <div class="form-container">
     @if (TempData["Mensaje"] != null)
