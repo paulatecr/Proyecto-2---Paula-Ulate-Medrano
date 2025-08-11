@@ -1,0 +1,132 @@
+﻿
+@model List<Proyecto_2___Paula_Ulate_Medrano.Models.Especie>
+@using System.Linq
+
+@{
+    ViewBag.Title = "Gestión de Semillas";
+    var usuarioSesion = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
+    bool puedeEditar = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
+}
+
+<h1 class="h1-Index">Gestión de Semillas</h1>
+
+@if (puedeEditar)
+{
+    <div class="button-container" style="margin-top: 30px;">
+        @Html.ActionLink("Agregar Especie", "Create", "Especie", null, new { @class = "button" })
+    </div>
+}
+
+
+@if (TempData["Mensaje"] != null)
+{
+    <p style="color: green; text-align: center;">@TempData["Mensaje"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p style="color: red; text-align: center;">@TempData["Error"]</p>
+}
+
+<div class="form-container">
+    <div style="margin: 10px auto; text-align: center;">
+        <label for="busqueda">Buscar por Nombre Común o Científico:</label>
+        <input type="text" id="busqueda" placeholder="Buscar especie..." style="width: 80%;" />
+    </div>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div id="datoTabla">
+        <table id="tablaEspecies">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre Científico</th>
+                    <th>Nombre Común</th>
+                    <th>Familia</th>
+                    <th>Descripción</th>
+                    @if (puedeEditar)
+                    {
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            <a href="@Url.Action("Detalle", "Especie", new { id = item.Id })" >@item.NombreCientifico</a>
+                        </td>
+                        <td>@item.NombreComun</td>
+                        <td>@item.Familia</td>
+                        <td class="descripcion-columna">@item.Descripcion</td>
+                        @if (puedeEditar)
+                        {
+                            <td>
+                                <a href="@Url.Action("Edit", "Especie", new { id = item.Id })" class="button" title="Editar">✏️</a>
+                            </td>
+                            <td>
+                                <button class="button btn-eliminar" data-id="@item.Id" data-nombre="@item.NombreComun">🗑️</button>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p style="text-align: center;">No hay especies registradas.</p>
+}
+
+<!-- Modal Confirmación -->
+<div id="modalConfirmacion" class="modal">
+    <div class="modal-contenido">
+        <h3>Confirmar eliminación</h3>
+        <p id="textoModal"></p>
+        <div style="text-align: center; margin-top: 20px;">
+            <button class="button" id="btnConfirmarEliminar">Eliminar</button>
+            <button class="button" onclick="cerrarModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        let idSeleccionado = 0;
+
+        document.querySelectorAll(".btn-eliminar").forEach(btn => {
+            btn.addEventListener("click", function () {
+                idSeleccionado = this.getAttribute("data-id");
+                const nombre = this.getAttribute("data-nombre");
+                document.getElementById("textoModal").textContent = `¿Está Seguro que Desea Eliminar la Especie "${nombre}"?`;
+                document.getElementById("modalConfirmacion").style.display = "block";
+            });
+        });
+
+        document.getElementById("btnConfirmarEliminar").addEventListener("click", function () {
+            window.location.href = "/Especie/Eliminar/" + idSeleccionado;
+        });
+
+        function cerrarModal() {
+            document.getElementById("modalConfirmacion").style.display = "none";
+        }
+
+        document.getElementById("busqueda").addEventListener("keyup", function () {
+            var texto = this.value.toLowerCase();
+            var filas = document.querySelectorAll("#tablaEspecies tbody tr");
+
+            filas.forEach(function (fila) {
+                var nombreCientifico = fila.cells[1].textContent.toLowerCase();
+                var nombreComun = fila.cells[2].textContent.toLowerCase();
+
+                fila.style.display = (nombreCientifico.includes(texto) || nombreComun.includes(texto)) ? "" : "none";
+            });
+        });
+    </script>
+}
+

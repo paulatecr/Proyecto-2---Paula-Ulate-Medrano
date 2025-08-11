@@ -1,0 +1,67 @@
+﻿@model Proyecto_2___Paula_Ulate_Medrano.Models.Especie
+@using System.Collections.Generic
+
+@{
+    // Bandera para "solo lectura" enviada desde el controller (Detalle)
+    bool esSoloLectura = ViewBag.EsSoloLectura != null && (bool)ViewBag.EsSoloLectura;
+
+    // Título dinámico
+    ViewBag.Title = esSoloLectura ? "Detalle de Especie" : "Editar Especie";
+
+    // Atributos para inputs (evita CS0173 usando diccionarios)
+    var attrsInput = new Dictionary<string, object>();
+    if (esSoloLectura)
+    {
+        attrsInput["readonly"] = "readonly";
+    }
+    else
+    {
+        attrsInput["required"] = "required";
+    }
+
+    // Atributos para textarea (hereda de input y agrega rows)
+    var attrsTextArea = new Dictionary<string, object>(attrsInput);
+    attrsTextArea["rows"] = 4;
+}
+
+<h1 class="h1-Index">@ViewBag.Title</h1>
+
+<div class="form-container">
+    <h1>@ViewBag.Title</h1>
+
+    @using (Html.BeginForm("Edit", "Especie", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.Id)
+
+        @Html.LabelFor(m => m.NombreCientifico)
+        @Html.TextBoxFor(m => m.NombreCientifico, attrsInput)
+        @Html.ValidationMessageFor(m => m.NombreCientifico)
+
+        @Html.LabelFor(m => m.NombreComun)
+        @Html.TextBoxFor(m => m.NombreComun, attrsInput)
+        @Html.ValidationMessageFor(m => m.NombreComun)
+
+        @Html.LabelFor(m => m.Familia)
+        @Html.TextBoxFor(m => m.Familia, attrsInput)
+        @Html.ValidationMessageFor(m => m.Familia)
+
+        @Html.LabelFor(m => m.Descripcion)
+        @Html.TextAreaFor(m => m.Descripcion, attrsTextArea)
+        @Html.ValidationMessageFor(m => m.Descripcion)
+
+        if (!esSoloLectura)
+        {
+            <div class="button-container">
+                <button type="submit" class="button">Guardar Cambios</button>
+                <a href="@Url.Action("Index", "Especie")" class="button">Cancelar</a>
+            </div>
+        }
+        else
+        {
+            <div class="button-container">
+                <a href="@Url.Action("Index", "Especie")" class="button">Volver</a>
+            </div>
+        }
+    }
+</div>

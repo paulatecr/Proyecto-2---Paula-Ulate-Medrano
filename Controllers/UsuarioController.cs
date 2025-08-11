@@ -23,8 +23,8 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         }
         public ActionResult Index()
         {
-            repositorio.GetAll();
-            return View();
+            var listaUsuarios = repositorio.GetAll();
+            return View(listaUsuarios);
         }
 
         public ActionResult Create()

@@ -1,0 +1,30 @@
+﻿
+@model Proyecto_2___Paula_Ulate_Medrano.Models.Especie
+    
+@{
+    ViewBag.Title = "Registrar Especie";
+}
+
+<div class="form-container">
+    <h1>Registrar Especie</h1>
+
+    @using (Html.BeginForm("Create", "Especie", FormMethod.Post))
+    {
+        <label for="NombreCientifico">Nombre Científico:</label>
+        @Html.TextBoxFor(m => m.NombreCientifico, new { required = "required" })
+
+        <label for="NombreComun">Nombre Común:</label>
+        @Html.TextBoxFor(m => m.NombreComun, new { required = "required" })
+
+        <label for="Familia">Familia:</label>
+        @Html.TextBoxFor(m => m.Familia, new { required = "required" })
+
+        <label for="Descripcion">Descripción:</label>
+        @Html.TextAreaFor(m => m.Descripcion, new { rows = 4 })
+
+        <div class="button-container">
+            <button type="submit" class="button">Registrar</button>
+        </div>
+    }
+</div>
+

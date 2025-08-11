@@ -100,8 +100,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string query = @"INSERT INTO Usuario (Nombre, Correo, ContrasenaHash, Rol, Activo)
-                             VALUES (@Nombre, @Correo, @ContrasenaHash, @Rol, @Activo)";
+                string query = @"INSERT INTO Usuario 
+                         (UserId, Nombre, Correo, Contrasena, Rol, Activo)
+                         VALUES (@UserId, @Nombre, @Correo, @Contrasena, @Rol, @Activo)";
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Nombre", usuario.Nombre);
                 cmd.Parameters.AddWithValue("@UserID", usuario.UserID);
@@ -119,7 +120,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"UPDATE Usuario 
-                             SET Nombre = @Nombre, Correo = @Correo, ContrasenaHash = @ContrasenaHash, 
+                             SET Nombre = UserId = @UserId, @Nombre, Correo = @Correo, Contrasena = @Contrasena, 
                                  Rol = @Rol, Activo = @Activo
                              WHERE Id = @Id";
                 SqlCommand cmd = new SqlCommand(query, connection);
