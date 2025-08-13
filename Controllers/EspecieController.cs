@@ -78,7 +78,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return View(especie);
         }
 
-        // GET: Especie/Eliminar/5
+        // GET: Especie/Eliminar
         public ActionResult Eliminar(int id)
         {
             var especie = repositorio.GetById(id);
@@ -95,7 +95,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET: Especie/Details/5
+        // GET: Especie/Details
         public ActionResult Detalle(int id)
         {
             var especie = repositorio.GetById(id);

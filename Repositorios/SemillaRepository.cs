@@ -94,7 +94,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.Parameters.AddWithValue("@FechaAlmacenamiento", semilla.FechaAlmacenamiento);
 
                 var fechaCreacion = semilla.FechaCreacion == default ? DateTime.Now : semilla.FechaCreacion;
-                var creadoPor = semilla.CreadoPor == 0 ? 1 : semilla.CreadoPor; // TODO: usar el Id del usuario en sesión
+                var creadoPor = semilla.CreadoPor == 0 ? 1 : semilla.CreadoPor; 
 
                 cmd.Parameters.AddWithValue("@FechaCreacion", fechaCreacion);
                 cmd.Parameters.AddWithValue("@CreadoPor", creadoPor);
@@ -128,7 +128,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.Parameters.AddWithValue("@Cantidad", semilla.Cantidad);
                 cmd.Parameters.AddWithValue("@FechaAlmacenamiento", semilla.FechaAlmacenamiento);
                 cmd.Parameters.AddWithValue("@FechaModificacion", (object)semilla.FechaModificacion ?? DateTime.Now);
-                cmd.Parameters.AddWithValue("@ModificadoPor", (object)semilla.ModificadoPor ?? 1); // TODO: usuario en sesión
+                cmd.Parameters.AddWithValue("@ModificadoPor", (object)semilla.ModificadoPor ?? 1); 
 
                 cmd.Parameters.AddWithValue("@Id", semilla.Id);
 

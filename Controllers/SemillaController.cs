@@ -24,7 +24,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         // GET: Semilla
         public ActionResult Index(int? especieId)
         {
-            var semillas = repoSemilla.GetAll(); // trae todas
+            var semillas = repoSemilla.GetAll();
             ViewBag.Especies = new SelectList(repoEspecie.GetAll(), "Id", "NombreComun");
             ViewBag.EspecieIdSeleccionada = especieId;
 
@@ -49,7 +49,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             if (ModelState.IsValid)
             {
                 semilla.FechaCreacion = DateTime.Now;
-                semilla.CreadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1; // Id del usuario logueado
+                semilla.CreadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1; 
 
                 repoSemilla.Insert(semilla);
                 TempData["Mensaje"] = "Semilla agregada correctamente.";
@@ -92,7 +92,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return View(semilla);
         }
 
-        // GET: Semilla/Eliminar/5
+        // GET: Semilla/Eliminar
         public ActionResult Eliminar(int id)
         {
             var s = repoSemilla.GetById(id);
@@ -134,7 +134,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             ViewBag.NombreEspecie = e?.NombreComun ?? e?.NombreCientifico ?? $"Especie #{s.EspecieId}";
             ViewBag.NombreUbicacion = u?.Nombre ?? $"Ubicación #{s.UbicacionId}";
 
-            return View("Detalle", s); // <-- Asegúrate de tener Views/Semilla/Detalle.cshtm
+            return View("Detalle", s); 
 
         }
     }
