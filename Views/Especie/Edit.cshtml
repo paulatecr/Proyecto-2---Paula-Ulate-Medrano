@@ -2,13 +2,12 @@
 @using System.Collections.Generic
 
 @{
-    // Bandera para "solo lectura" enviada desde el controller (Detalle)
     bool esSoloLectura = ViewBag.EsSoloLectura != null && (bool)ViewBag.EsSoloLectura;
 
     // Título dinámico
     ViewBag.Title = esSoloLectura ? "Detalle de Especie" : "Editar Especie";
 
-    // Atributos para inputs (evita CS0173 usando diccionarios)
+
     var attrsInput = new Dictionary<string, object>();
     if (esSoloLectura)
     {
@@ -19,12 +18,9 @@
         attrsInput["required"] = "required";
     }
 
-    // Atributos para textarea (hereda de input y agrega rows)
     var attrsTextArea = new Dictionary<string, object>(attrsInput);
     attrsTextArea["rows"] = 4;
 }
-
-<h1 class="h1-Index">@ViewBag.Title</h1>
 
 <div class="form-container">
     <h1>@ViewBag.Title</h1>

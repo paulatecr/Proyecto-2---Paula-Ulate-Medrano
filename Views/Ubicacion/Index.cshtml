@@ -4,11 +4,11 @@
     ViewBag.Title = "Gestión de Ubicaciones";
 }
 
+<h1 class="h1-Index">Ubicaciones de Almacenamiento</h1>
+
 <div class="button-container" style="margin-top:30px;">
     @Html.ActionLink("Agregar Ubicación", "Create", "Ubicacion", null, new { @class = "button" })
 </div>
-
-<h1 class="h1-Index">Ubicaciones de Almacenamiento</h1>
 
 <div class="form-container">
     @if (TempData["Mensaje"] != null)

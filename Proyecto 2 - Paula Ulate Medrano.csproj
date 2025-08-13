@@ -128,6 +128,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\SemillaGrid.cs" />
     <Compile Include="Models\ConexionBaseDatos.cs" />
     <Compile Include="Models\Especie.cs" />
     <Compile Include="Models\ReporteProgramado.cs" />
@@ -205,10 +206,11 @@
     <Content Include="Views\Ubicacion\Index.cshtml" />
     <Content Include="Views\Ubicacion\Create.cshtml" />
     <Content Include="Views\Ubicacion\Edit.cshtml" />
+    <Content Include="Views\Semilla\Inventario.cshtml" />
+    <Content Include="Views\Semilla\Detalle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

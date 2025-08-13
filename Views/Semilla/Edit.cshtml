@@ -3,10 +3,8 @@
 
 @{
     ViewBag.Title = "Editar Semilla";
-    // Si quieres modo detalle/solo lectura en el futuro, puedes usar una bandera aquí.
 }
 
-<h1 class="h1-Index">Editar Semilla</h1>
 
 <div class="form-container">
     <h1>Editar Semilla</h1>
@@ -36,8 +34,10 @@
 
         <div class="button-container">
             <button type="submit" class="button">Guardar</button>
+        </div>
+
+        <div class="button-container">
             <a href="@Url.Action("Index","Semilla")" class="button">Cancelar</a>
         </div>
-    }
     }
 </div>

@@ -131,9 +131,8 @@ input, select, textarea {
 }
 
     .form-row-inline label {
-        width: 80px; 
         font-weight: bold;
-        margin-right: 0px;
+        margin-right: 3px;
     }
 
     .form-row-inline p {

@@ -1,0 +1,75 @@
+﻿@model List<Proyecto_2___Paula_Ulate_Medrano.Models.SemillaGrid>
+@using System.Linq
+
+@{
+    ViewBag.Title = "Inventario de Semillas";
+}
+
+<h1 class="h1-Index">Inventario de Semillas</h1>
+
+<div class="form-container">
+    @if (TempData["Mensaje"] != null)
+    {<p style="color:green; text-align:center;">@TempData["Mensaje"]</p>}
+    @if (TempData["Error"] != null)
+    {<p style="color:red; text-align:center;">@TempData["Error"]</p>}
+
+    <div style="margin: 10px auto; text-align:center;">
+        <label for="busqueda">Buscar por nombre, especie o ubicación:</label>
+        <input type="text" id="busqueda" placeholder="Ingrese texto..." style="width:80%;" />
+    </div>
+</div>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div id="datoTabla">
+        <table id="tablaInventario">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>          
+                    <th>Especie</th>
+                    <th>Ubicación</th>
+                    <th>Cantidad</th>
+                    <th>Fecha Almacenamiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.Id</td>
+                        <td>
+                            <a href="@Url.Action("Detalle", "Semilla", new { id = s.Id })">
+                                @s.Nombre
+                            </a>
+                        </td>
+                        <td>@s.NombreEspecie</td>
+                        <td>@s.NombreUbicacion</td>
+                        <td>@s.Cantidad</td>
+                        <td>@s.FechaAlmacenamiento.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p style="text-align:center;">No hay semillas registradas.</p>
+}
+
+@section scripts {
+    <script>
+        document.getElementById("busqueda").addEventListener("keyup", function () {
+            var texto = this.value.toLowerCase();
+            var filas = document.querySelectorAll("#tablaInventario tbody tr");
+            filas.forEach(function (fila) {
+                var nombre = fila.cells[1].textContent.toLowerCase();
+                var especie = fila.cells[2].textContent.toLowerCase();
+                var ubicacion = fila.cells[3].textContent.toLowerCase();
+                fila.style.display = (nombre.includes(texto) || especie.includes(texto) || ubicacion.includes(texto)) ? "" : "none";
+            });
+        });
+    </script>
+}
+

@@ -80,11 +80,11 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"INSERT INTO Semilla 
-                (Nombre, EspecieId, UbicacionId, Cantidad, FechaAlmacenamiento, 
-                 FechaCreacion, CreadoPor, FechaModificacion, ModificadoPor)
-                VALUES 
-                (@Nombre, @EspecieId, @UbicacionId, @Cantidad, @FechaAlmacenamiento, 
-                 @FechaCreacion, @CreadoPor, @FechaModificacion, @ModificadoPor)";
+            (Nombre, EspecieId, UbicacionId, Cantidad, FechaAlmacenamiento, 
+             FechaCreacion, CreadoPor, FechaModificacion, ModificadoPor)
+            VALUES 
+            (@Nombre, @EspecieId, @UbicacionId, @Cantidad, @FechaAlmacenamiento, 
+             @FechaCreacion, @CreadoPor, @FechaModificacion, @ModificadoPor)";
 
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Nombre", semilla.Nombre);
@@ -92,10 +92,15 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.Parameters.AddWithValue("@UbicacionId", semilla.UbicacionId);
                 cmd.Parameters.AddWithValue("@Cantidad", semilla.Cantidad);
                 cmd.Parameters.AddWithValue("@FechaAlmacenamiento", semilla.FechaAlmacenamiento);
-                cmd.Parameters.AddWithValue("@FechaCreacion", semilla.FechaCreacion);
-                cmd.Parameters.AddWithValue("@CreadoPor", semilla.CreadoPor);
-                //cmd.Parameters.AddWithValue("@FechaModificacion", (object?)semilla.FechaModificacion ?? DBNull.Value);
-               // cmd.Parameters.AddWithValue("@ModificadoPor", (object?)semilla.ModificadoPor ?? DBNull.Value);
+
+                var fechaCreacion = semilla.FechaCreacion == default ? DateTime.Now : semilla.FechaCreacion;
+                var creadoPor = semilla.CreadoPor == 0 ? 1 : semilla.CreadoPor; // TODO: usar el Id del usuario en sesión
+
+                cmd.Parameters.AddWithValue("@FechaCreacion", fechaCreacion);
+                cmd.Parameters.AddWithValue("@CreadoPor", creadoPor);
+
+                cmd.Parameters.AddWithValue("@FechaModificacion", (object)semilla.FechaModificacion ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ModificadoPor", (object)semilla.ModificadoPor ?? DBNull.Value);
 
                 connection.Open();
                 cmd.ExecuteNonQuery();
@@ -107,14 +112,14 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string query = @"UPDATE Semilla SET 
-                Nombre = @Nombre,
-                EspecieId = @EspecieId,
-                UbicacionId = @UbicacionId,
-                Cantidad = @Cantidad,
-                FechaAlmacenamiento = @FechaAlmacenamiento,
-                FechaModificacion = @FechaModificacion,
-                ModificadoPor = @ModificadoPor
-                WHERE Id = @Id";
+            Nombre = @Nombre,
+            EspecieId = @EspecieId,
+            UbicacionId = @UbicacionId,
+            Cantidad = @Cantidad,
+            FechaAlmacenamiento = @FechaAlmacenamiento,
+            FechaModificacion = @FechaModificacion,
+            ModificadoPor = @ModificadoPor
+        WHERE Id = @Id";
 
                 SqlCommand cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@Nombre", semilla.Nombre);
@@ -122,8 +127,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 cmd.Parameters.AddWithValue("@UbicacionId", semilla.UbicacionId);
                 cmd.Parameters.AddWithValue("@Cantidad", semilla.Cantidad);
                 cmd.Parameters.AddWithValue("@FechaAlmacenamiento", semilla.FechaAlmacenamiento);
-                //cmd.Parameters.AddWithValue("@FechaModificacion", (object?)semilla.FechaModificacion ?? DBNull.Value);
-                //cmd.Parameters.AddWithValue("@ModificadoPor", (object?)semilla.ModificadoPor ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@FechaModificacion", (object)semilla.FechaModificacion ?? DateTime.Now);
+                cmd.Parameters.AddWithValue("@ModificadoPor", (object)semilla.ModificadoPor ?? 1); // TODO: usuario en sesión
+
                 cmd.Parameters.AddWithValue("@Id", semilla.Id);
 
                 connection.Open();
@@ -141,6 +147,40 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Repositorios
                 connection.Open();
                 cmd.ExecuteNonQuery();
             }
+        }
+
+    public List<SemillaGrid> GetAllWithNames()
+        {
+            var list = new List<SemillaGrid>();
+            using (var cn = new SqlConnection(connectionString))
+            {
+                var sql = @"
+                SELECT s.Id, s.Nombre, s.EspecieId, s.UbicacionId, s.Cantidad, s.FechaAlmacenamiento,
+                e.NombreComun   AS NombreEspecie,
+                u.Nombre        AS NombreUbicacion
+                FROM   Semilla s
+                JOIN   Especie e   ON e.Id = s.EspecieId
+                JOIN   Ubicacion u ON u.Id = s.UbicacionId
+                ORDER BY s.Id DESC;";
+                var cmd = new SqlCommand(sql, cn);
+                cn.Open();
+                var rd = cmd.ExecuteReader();
+                while (rd.Read())
+                {
+                    list.Add(new SemillaGrid
+                    {
+                        Id = (int)rd["Id"],
+                        Nombre = rd["Nombre"].ToString(),
+                        EspecieId = (int)rd["EspecieId"],
+                        UbicacionId = (int)rd["UbicacionId"],
+                        Cantidad = (int)rd["Cantidad"],
+                        FechaAlmacenamiento = (DateTime)rd["FechaAlmacenamiento"],
+                        NombreEspecie = rd["NombreEspecie"].ToString(),
+                        NombreUbicacion = rd["NombreUbicacion"].ToString()
+                    });
+                }
+            }
+            return list;
         }
     }
 }

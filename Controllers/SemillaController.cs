@@ -46,19 +46,18 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Semilla semilla)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                CargarCombos();
-                return View(semilla);
+                semilla.FechaCreacion = DateTime.Now;
+                semilla.CreadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1; // Id del usuario logueado
+
+                repoSemilla.Insert(semilla);
+                TempData["Mensaje"] = "Semilla agregada correctamente.";
+                return RedirectToAction("Index");
             }
 
-            // trazabilidad mínima (ajusta con tu sesión)
-            semilla.FechaCreacion = DateTime.Now;
-            semilla.CreadoPor = 1; // TODO: reemplazar por (Session["UsuarioLogueado"] as Usuario).Id
-
-            repoSemilla.Insert(semilla);
-            TempData["Mensaje"] = "Semilla agregada correctamente.";
-            return RedirectToAction("Index");
+            CargarCombos(); 
+            return View(semilla);
         }
 
         // GET: Semilla/Edit/5
@@ -79,18 +78,18 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Semilla semilla)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                CargarCombos();
-                return View(semilla);
+                semilla.FechaModificacion = DateTime.Now;
+                semilla.ModificadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1;
+
+                repoSemilla.Update(semilla);
+                TempData["Mensaje"] = "Semilla actualizada correctamente.";
+                return RedirectToAction("Index");
             }
 
-            semilla.FechaModificacion = DateTime.Now;
-            semilla.ModificadoPor = 1; // TODO: usuario sesión
-
-            repoSemilla.Update(semilla);
-            TempData["Mensaje"] = "Semilla actualizada correctamente.";
-            return RedirectToAction("Index");
+            CargarCombos();
+            return View(semilla);
         }
 
         // GET: Semilla/Eliminar/5
@@ -113,6 +112,30 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         {
             ViewBag.Especies = new SelectList(repoEspecie.GetAll(), "Id", "NombreComun");
             ViewBag.Ubicaciones = new SelectList(repoUbicacion.GetAll(), "Id", "Nombre");
+        }
+
+        public ActionResult Inventario()
+        {
+            var lista = repoSemilla.GetAllWithNames(); 
+            return View(lista);
+        }
+
+        public ActionResult Detalle(int id)
+        {
+            var s = repoSemilla.GetById(id);
+            if (s == null)
+            {
+                TempData["Error"] = "Semilla no encontrada.";
+                return RedirectToAction("Inventario");
+            }
+
+            var e = repoEspecie.GetById(s.EspecieId);
+            var u = repoUbicacion.GetById(s.UbicacionId);
+            ViewBag.NombreEspecie = e?.NombreComun ?? e?.NombreCientifico ?? $"Especie #{s.EspecieId}";
+            ViewBag.NombreUbicacion = u?.Nombre ?? $"Ubicación #{s.UbicacionId}";
+
+            return View("Detalle", s); // <-- Asegúrate de tener Views/Semilla/Detalle.cshtm
+
         }
     }
 }

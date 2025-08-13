@@ -1,0 +1,37 @@
+﻿@model Proyecto_2___Paula_Ulate_Medrano.Models.Semilla
+@{
+    ViewBag.Title = "Detalle de Semilla";
+}
+
+<div class="form-container">
+    <h1>Detalle de Semilla</h1>
+
+    <div class="form-row-inline">
+        <label>Nombre: </label>
+        <p>@Model.Nombre</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Especie: </label>
+        <p>@(ViewBag.NombreEspecie ?? Model.EspecieId.ToString())</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Ubicación: </label>
+        <p>@(ViewBag.NombreUbicacion ?? Model.UbicacionId.ToString())</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Cantidad:</label>
+        <p>@Model.Cantidad</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Fecha de Almacenamiento: </label>
+        <p>@Model.FechaAlmacenamiento.ToString("yyyy-MM-dd")</p>
+    </div>
+
+    <div class="button-container">
+        <a href="@Url.Action("Inventario", "Semilla")" class="button">Volver</a>
+    </div>
+</div>
