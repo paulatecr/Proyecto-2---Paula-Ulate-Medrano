@@ -1,4 +1,4 @@
-﻿using Proyecto_2___Paula_Ulate_Medrano.Models;
+﻿using Arca.Shared.Models;
 using Proyecto_2___Paula_Ulate_Medrano.Repositorios;
 using System;
 using System.Collections.Generic;

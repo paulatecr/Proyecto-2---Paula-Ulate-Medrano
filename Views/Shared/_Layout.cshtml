@@ -1,5 +1,8 @@
 ﻿
-
+@using Arca.Shared.Models
+@{
+     var user = Session["UsuarioLogueado"] as Usuario;
+}
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,10 +13,7 @@
     @Styles.Render("~/Content/css")
     <link href="~/Content/Style.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
-    @using Proyecto_2___Paula_Ulate_Medrano.Models
-    @{
-        var user = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
-    }
+
 </head>
 <body>
 
@@ -24,7 +24,7 @@
 
                 <ul class="menu-navbar">
                     @if (user == null)
-                    {
+    {
                         <li>@Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Contacto", "Contact", "Home", null, new { @class = "nav-link" })</li>
                     }
@@ -38,7 +38,7 @@
                             <li>@Html.ActionLink("Usuarios Existentes", "Index", "Usuario", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Gestión de Especies", "Index", "Especie", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Gestión de Semillas", "Index", "Semilla", null, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Inventario de Semillas", "Inventario", "Semilla", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Inventario de Semillas (API)", "Inventario", "Semilla", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Gestión de Ubicaciones", "Index", "Ubicacion", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Contacto", "Contact", "Home", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Cerrar sesión", "CerrarSesion", "Home", null, new { @class = "nav-link" })</li>

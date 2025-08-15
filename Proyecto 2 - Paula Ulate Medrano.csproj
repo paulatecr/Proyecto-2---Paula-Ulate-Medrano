@@ -128,19 +128,10 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\SemillaGrid.cs" />
-    <Compile Include="Models\ConexionBaseDatos.cs" />
-    <Compile Include="Models\Especie.cs" />
-    <Compile Include="Models\ReporteProgramado.cs" />
-    <Compile Include="Models\Semilla.cs" />
-    <Compile Include="Models\Ubicacion.cs" />
-    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositorios\EspecieRepository.cs" />
     <Compile Include="Repositorios\ReporteProgramadoRepository.cs" />
-    <Compile Include="Repositorios\SemillaRepository.cs" />
-    <Compile Include="Repositorios\UbicacionRepository.cs" />
     <Compile Include="Repositorios\UsuarioRepository.cs" />
+    <Compile Include="Services\ApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -239,9 +230,21 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Arca.Shared\Arca.Shared.csproj">
+      <Project>{129cdd03-927a-970f-68e7-fe2330ee6151}</Project>
+      <Name>Arca.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

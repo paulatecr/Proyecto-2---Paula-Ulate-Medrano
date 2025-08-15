@@ -1,28 +1,39 @@
-﻿@model List<Proyecto_2___Paula_Ulate_Medrano.Models.Ubicacion>
+﻿@model List<Arca.Shared.Models.Ubicacion>
 @using System.Linq
+
 @{
     ViewBag.Title = "Gestión de Ubicaciones";
+    var usuarioSesion = Session["UsuarioLogueado"] as Arca.Shared.Models.Usuario;
+    bool puedeEditar = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 }
 
-<h1 class="h1-Index">Ubicaciones de Almacenamiento</h1>
+<h1 class="h1-Index">Gestión de Ubicaciones</h1>
 
-<div class="button-container" style="margin-top:30px;">
-    @Html.ActionLink("Agregar Ubicación", "Create", "Ubicacion", null, new { @class = "button" })
-</div>
+@if (TempData["Mensaje"] != null)
+{
+    <p style="color: green; text-align: center;">@TempData["Mensaje"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p style="color: red; text-align: center;">@TempData["Error"]</p>
+}
 
+@if (puedeEditar)
+{
+    <div class="button-container" style="margin-top: 20px;">
+        @Html.ActionLink("Agregar Ubicación", "Create", "Ubicacion", null, new { @class = "button" })
+    </div>
+}
+
+<br />
 <div class="form-container">
-    @if (TempData["Mensaje"] != null)
-    {<p style="color:green; text-align:center;">@TempData["Mensaje"]</p>}
-    @if (TempData["Error"] != null)
-    {<p style="color:red; text-align:center;">@TempData["Error"]</p>}
-
-    <div style="margin: 10px auto; text-align:center;">
-        <label for="busqueda">Buscar por nombre o condiciones:</label>
-        <input type="text" id="busqueda" placeholder="Ingrese texto..." style="width:80%;" />
+    <div style="margin: 10px auto; text-align: center;">
+        <label for="busqueda">Buscar por Nombre/Descripción/Condiciones:</label>
+        <input type="text" id="busqueda" value="@ViewBag.Filtro" placeholder="Ingrese texto para filtrar" style="width: 80%;" />
     </div>
 </div>
 
-@if (Model != null && Model.Count > 0)
+@if (Model != null && Model.Any())
 {
     <div id="datoTabla">
         <table id="tablaUbicaciones">
@@ -32,20 +43,30 @@
                     <th>Nombre</th>
                     <th>Descripción</th>
                     <th>Condiciones</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
+                    @if (puedeEditar)
+                    {
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    }
                 </tr>
             </thead>
             <tbody>
-                @foreach (var u in Model)
+                @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@u.Id</td>
-                        <td>@u.Nombre</td>
-                        <td class="descripcion-columna">@u.Descripcion</td>
-                        <td class="descripcion-columna">@u.Condiciones</td>
-                        <td><a href="@Url.Action("Edit","Ubicacion", new { id = u.Id })" class="button">✏️</a></td>
-                        <td><button class="button btn-eliminar" data-id="@u.Id" data-nombre="@u.Nombre">🗑️</button></td>
+                        <td>@item.Id</td>
+                        <td>@item.Nombre</td>
+                        <td class="descripcion-columna">@item.Descripcion</td>
+                        <td class="descripcion-columna">@item.Condiciones</td>
+                        @if (puedeEditar)
+                        {
+                            <td>
+                                <a href="@Url.Action("Edit", "Ubicacion", new { id = item.Id })" class="button" title="Editar">✏️</a>
+                            </td>
+                            <td>
+                                <button class="button btn-eliminar" data-id="@item.Id" data-nombre="@item.Nombre">🗑️</button>
+                            </td>
+                        }
                     </tr>
                 }
             </tbody>
@@ -57,45 +78,49 @@ else
     <p style="text-align:center;">No hay ubicaciones registradas.</p>
 }
 
-<!-- Modal Confirmación -->
+<!-- Modal de Confirmación -->
 <div id="modalConfirmacion" class="modal">
     <div class="modal-contenido">
         <h3>Confirmar eliminación</h3>
         <p id="textoModal"></p>
-        <div style="text-align:center; margin-top:20px;">
+        <div style="text-align: center; margin-top: 20px;">
             <button class="button" id="btnConfirmarEliminar">Eliminar</button>
             <button class="button" onclick="cerrarModal()">Cancelar</button>
         </div>
     </div>
 </div>
 
-@section scripts{
+@section scripts {
     <script>
-let idSeleccionado = 0;
+        // Filtro
+        document.getElementById("busqueda").addEventListener("keyup", function () {
+            var texto = this.value.toLowerCase();
+            var filas = document.querySelectorAll("#tablaUbicaciones tbody tr");
+            filas.forEach(function (fila) {
+                var nombre = fila.cells[1].textContent.toLowerCase();
+                var desc = fila.cells[2].textContent.toLowerCase();
+                var cond = fila.cells[3].textContent.toLowerCase();
+                fila.style.display = (nombre.includes(texto) || desc.includes(texto) || cond.includes(texto)) ? "" : "none";
+            });
+        });
 
-document.querySelectorAll(".btn-eliminar").forEach(btn=>{
-  btn.addEventListener("click", function(){
-    idSeleccionado = this.getAttribute("data-id");
-    const nombre = this.getAttribute("data-nombre");
-    document.getElementById("textoModal").textContent =
-      `¿Desea eliminar la ubicación "${nombre}"?`;
-    document.getElementById("modalConfirmacion").style.display = "block";
-  });
-});
+        // Modal de eliminar
+        let idSeleccionado = 0;
+        document.querySelectorAll(".btn-eliminar").forEach(btn => {
+            btn.addEventListener("click", function () {
+                idSeleccionado = this.getAttribute("data-id");
+                const nombre = this.getAttribute("data-nombre");
+                document.getElementById("textoModal").textContent = `¿Desea eliminar la ubicación "${nombre}"?`;
+                document.getElementById("modalConfirmacion").style.display = "block";
+            });
+        });
 
-document.getElementById("btnConfirmarEliminar").addEventListener("click", function(){
-  window.location.href = "/Ubicacion/Eliminar/" + idSeleccionado;
-});
+        document.getElementById("btnConfirmarEliminar").addEventListener("click", function () {
+            window.location.href = "/Ubicacion/Eliminar/" + idSeleccionado;
+        });
 
-function cerrarModal(){ document.getElementById("modalConfirmacion").style.display="none"; }
-
-document.getElementById("busqueda").addEventListener("keyup", function(){
-  const t = this.value.toLowerCase();
-  document.querySelectorAll("#tablaUbicaciones tbody tr").forEach(f=>{
-    const nombre = f.cells[1].textContent.toLowerCase();
-    const cond   = f.cells[3].textContent.toLowerCase();
-    f.style.display = (nombre.includes(t) || cond.includes(t)) ? "" : "none";
-  });
-});
+        function cerrarModal() {
+            document.getElementById("modalConfirmacion").style.display = "none";
+        }
     </script>
 }

@@ -1,4 +1,4 @@
-﻿using Proyecto_2___Paula_Ulate_Medrano.Models;
+﻿using Arca.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;

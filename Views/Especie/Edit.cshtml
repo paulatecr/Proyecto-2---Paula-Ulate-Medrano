@@ -1,66 +1,47 @@
-﻿@model Proyecto_2___Paula_Ulate_Medrano.Models.Especie
-@using System.Collections.Generic
+﻿@model Arca.Shared.Models.Especie
 
 @{
-    bool esSoloLectura = ViewBag.EsSoloLectura != null && (bool)ViewBag.EsSoloLectura;
-
-    // Título dinámico
-    ViewBag.Title = esSoloLectura ? "Detalle de Especie" : "Editar Especie";
-
-
-    var attrsInput = new Dictionary<string, object>();
-    if (esSoloLectura)
-    {
-        attrsInput["readonly"] = "readonly";
-    }
-    else
-    {
-        attrsInput["required"] = "required";
-    }
-
-    var attrsTextArea = new Dictionary<string, object>(attrsInput);
-    attrsTextArea["rows"] = 4;
+    ViewBag.Title = "Editar Especie";
 }
 
 <div class="form-container">
-    <h1>@ViewBag.Title</h1>
+    <h1>Editar Especie</h1>
+
+    @if (TempData["Error"] != null)
+    {
+        <p style="color:red; text-align:center;">@TempData["Error"]</p>
+    }
+    @if (TempData["Mensaje"] != null)
+    {
+        <p style="color:green; text-align:center;">@TempData["Mensaje"]</p>
+    }
+
+    @Html.ValidationSummary(excludePropertyErrors: true, message: "", htmlAttributes: new { @class = "text-danger", style = "text-align:center;" })
 
     @using (Html.BeginForm("Edit", "Especie", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Id)
 
-        @Html.LabelFor(m => m.NombreCientifico)
-        @Html.TextBoxFor(m => m.NombreCientifico, attrsInput)
-        @Html.ValidationMessageFor(m => m.NombreCientifico)
+        <label for="NombreCientifico">Nombre Científico:</label>
+        @Html.TextBoxFor(m => m.NombreCientifico, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.NombreCientifico, "", new { @class = "text-danger" })
 
-        @Html.LabelFor(m => m.NombreComun)
-        @Html.TextBoxFor(m => m.NombreComun, attrsInput)
-        @Html.ValidationMessageFor(m => m.NombreComun)
+        <label for="NombreComun">Nombre Común:</label>
+        @Html.TextBoxFor(m => m.NombreComun, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.NombreComun, "", new { @class = "text-danger" })
 
-        @Html.LabelFor(m => m.Familia)
-        @Html.TextBoxFor(m => m.Familia, attrsInput)
-        @Html.ValidationMessageFor(m => m.Familia)
+        <label for="Familia">Familia:</label>
+        @Html.TextBoxFor(m => m.Familia, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Familia, "", new { @class = "text-danger" })
 
-        @Html.LabelFor(m => m.Descripcion)
-        @Html.TextAreaFor(m => m.Descripcion, attrsTextArea)
-        @Html.ValidationMessageFor(m => m.Descripcion)
+        <label for="Descripcion">Descripción:</label>
+        @Html.TextAreaFor(m => m.Descripcion, new { rows = 4 })
+        @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
 
-        if (!esSoloLectura)
-        {
-            <div class="button-container">
-                <button type="submit" class="button">Guardar Cambios</button>
-            </div>
-
-            <div class="button-container">
-                <a href="@Url.Action("Index", "Especie")" class="button">Cancelar</a>
-            </div>
-        }
-        else
-        {
-            <div class="button-container">
-                <a href="@Url.Action("Index", "Especie")" class="button">Volver</a>
-            </div>
-        }
+        <div class="button-container" style="gap:12px; flex-wrap:wrap;">
+            <button type="submit" class="button">Guardar Cambios</button>
+            <a href="@Url.Action("Index", "Especie")" class="button">Cancelar</a>
+        </div>
     }
 </div>

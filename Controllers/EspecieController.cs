@@ -1,113 +1,142 @@
-﻿using Proyecto_2___Paula_Ulate_Medrano.Models;
-using Proyecto_2___Paula_Ulate_Medrano.Repositorios;
-using System;
+﻿using Arca.Shared.Models;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 {
     public class EspecieController : Controller
     {
-        private readonly EspecieRepository repositorio;
-
-        public EspecieController()
+        // =======================================
+        // INDEX 
+        // =======================================
+        [HttpGet]
+        public async Task<ActionResult> Index(string q = null)
         {
-            var connectionString = ConfigurationManager
-                .ConnectionStrings["ConexionBaseDatos"]
-                .ConnectionString;
+            using (var api = new ApiClient())
+            {
+                var especies = await api.GetAsync<List<Especie>>("api/especies")
+                               ?? new List<Especie>();
 
-            repositorio = new EspecieRepository(connectionString);
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    var term = q.Trim().ToLower();
+                    especies = especies
+                        .Where(e =>
+                            (e.NombreComun ?? "").ToLower().Contains(term) ||
+                            (e.NombreCientifico ?? "").ToLower().Contains(term) ||
+                            (e.Familia ?? "").ToLower().Contains(term))
+                        .ToList();
+                }
+
+                ViewBag.Filtro = q;
+                return View(especies);
+            }
         }
 
-        // GET: Especie
-        public ActionResult Index()
-        {
-            var lista = repositorio.GetAll();
-            return View(lista);
-        }
-
-        // GET: Especie/Create
+        // =======================================
+        // CREAR
+        // =======================================
+        [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            return View(new Especie());
         }
 
-        // POST: Especie/Create
         [HttpPost]
-        public ActionResult Create(Especie especie)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(Especie e)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(e);
+
+            using (var api = new ApiClient())
             {
-                repositorio.Insert(especie);
-                TempData["Mensaje"] = "Especie Registrada Exitosamente.";
-                return RedirectToAction("Index");
+                var resp = await api.PostAsync("api/especies", e);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError("", "No se pudo crear la especie (API).");
+                    return View(e);
+                }
             }
 
-            TempData["Error"] = "Error al Registrar la Especie.";
-            return View(especie);
-        }
-
-        // GET: Especie/Edit/5
-        public ActionResult Edit(int id)
-        {
-            var especie = repositorio.GetById(id);
-            if (especie == null)
-            {
-                TempData["Error"] = "Especie no Encontrada.";
-                return RedirectToAction("Index");
-            }
-
-            return View(especie);
-        }
-
-        // POST: Especie/Edit/5
-        [HttpPost]
-        public ActionResult Edit(Especie especie)
-        {
-            if (ModelState.IsValid)
-            {
-                repositorio.Update(especie);
-                TempData["Mensaje"] = "Especie Actualizada Correctamente.";
-                return RedirectToAction("Index");
-            }
-
-            TempData["Error"] = "Error al Actualizar la Especie.";
-            return View(especie);
-        }
-
-        // GET: Especie/Eliminar
-        public ActionResult Eliminar(int id)
-        {
-            var especie = repositorio.GetById(id);
-            if (especie == null)
-            {
-                TempData["Error"] = "Especie no Encontrada.";
-            }
-            else
-            {
-                repositorio.Delete(id);
-                TempData["Mensaje"] = "Especie Eliminada Correctamente.";
-            }
-
+            TempData["Mensaje"] = "Especie creada correctamente.";
             return RedirectToAction("Index");
         }
 
-        // GET: Especie/Details
-        public ActionResult Detalle(int id)
+        // =======================================
+        // EDITAR
+        // =======================================
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id)
         {
-            var especie = repositorio.GetById(id);
-            if (especie == null)
+            using (var api = new ApiClient())
             {
-                TempData["Error"] = "Especie no encontrada.";
-                return RedirectToAction("Index");
+                var especie = await api.GetAsync<Especie>($"api/especies/{id}");
+                if (especie == null)
+                {
+                    TempData["Error"] = "Especie no encontrada.";
+                    return RedirectToAction("Index");
+                }
+                return View(especie);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Especie e)
+        {
+            if (!ModelState.IsValid)
+                return View(e);
+
+            using (var api = new ApiClient())
+            {
+                var resp = await api.PutAsync($"api/especies/{e.Id}", e);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError("", "No se pudo actualizar la especie (API).");
+                    return View(e);
+                }
             }
 
-            ViewBag.EsSoloLectura = true;
-            return View("Edit", especie);     
+            TempData["Mensaje"] = "Especie actualizada correctamente.";
+            return RedirectToAction("Index");
+        }
+
+        // =======================================
+        // ELIMINAR 
+        // =======================================
+        [HttpGet]
+        public async Task<ActionResult> Eliminar(int id)
+        {
+            using (var api = new ApiClient())
+            {
+                var resp = await api.DeleteAsync($"api/especies/{id}");
+                if (!resp.IsSuccessStatusCode)
+                    TempData["Error"] = "No se pudo eliminar la especie (API).";
+                else
+                    TempData["Mensaje"] = "Especie eliminada correctamente.";
+            }
+            return RedirectToAction("Index");
+        }
+
+        // =======================================
+        // DETALLE 
+        // =======================================
+        [HttpGet]
+        public async Task<ActionResult> Detalle(int id)
+        {
+            using (var api = new ApiClient())
+            {
+                var especie = await api.GetAsync<Especie>($"api/especies/{id}");
+                if (especie == null)
+                {
+                    TempData["Error"] = "Especie no encontrada.";
+                    return RedirectToAction("Index");
+                }
+                return View(especie); // Crea una vista Detalle si la usarás
+            }
         }
     }
-
 }
