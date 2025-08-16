@@ -1,10 +1,7 @@
-﻿using Proyecto_2___Paula_Ulate_Medrano.Repositorios;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Arca.Shared.Models; // tu modelo Usuario con UserId, Contrasena, etc.
 
 namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 {
@@ -18,34 +15,47 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
+        // IMPORTANTE:
+        // - Quitamos el using a Proyecto_2___Paula_Ulate_Medrano.Repositorios
+        // - No instanciamos UsuarioRepository (los repos están en la API).
+        // - Consumimos la API vía ApiClient (igual que UbicacionController).
         [HttpPost]
-        public ActionResult Login(string usuario, string contrasena)
+        public async Task<ActionResult> Login(string usuario, string contrasena)
         {
-            var repo = new UsuarioRepository(ConfigurationManager.ConnectionStrings["ConexionBaseDatos"].ConnectionString);
-            var usuarios = repo.GetAll();
-            var user = usuarios.FirstOrDefault(u => u.UserId == usuario && u.Contrasena == contrasena);
-
-            if (user != null)
+            if (string.IsNullOrWhiteSpace(usuario) || string.IsNullOrWhiteSpace(contrasena))
             {
-                Session["UsuarioLogueado"] = user;
-                return RedirectToAction("Perfil", "Usuario");
-            }
-            else
-            {
-                ViewBag.Mensaje = "Credenciales incorrectas.";
+                ViewBag.Mensaje = "Debe ingresar usuario y contraseña.";
                 return View("Index");
             }
+
+            using (var api = new ApiClient())
+            {
+                // Opción A (sin tocar la API): traemos todos y filtramos aquí.
+                var usuarios = await api.GetAsync<System.Collections.Generic.List<Usuario>>("api/usuarios")
+                               ?? new System.Collections.Generic.List<Usuario>();
+
+                var user = usuarios
+                    .FirstOrDefault(u => (u.UserId ?? "").Trim().ToLower() == usuario.Trim().ToLower()
+                                      && (u.Contrasena ?? "") == contrasena);
+
+                if (user != null)
+                {
+                    Session["UsuarioLogueado"] = user;
+                    return RedirectToAction("Perfil", "Usuario");
+                }
+            }
+
+            ViewBag.Mensaje = "Credenciales incorrectas.";
+            return View("Index");
         }
 
         public ActionResult CerrarSesion()
@@ -53,8 +63,5 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             Session.Clear();
             return RedirectToAction("Index", "Home");
         }
-
-
-
     }
 }

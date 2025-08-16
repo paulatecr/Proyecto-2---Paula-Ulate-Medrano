@@ -18,26 +18,32 @@
 
     @Html.ValidationSummary(excludePropertyErrors: true, message: "", htmlAttributes: new { @class = "text-danger", style = "text-align:center;" })
 
-    @using (Html.BeginForm("Edit", "Ubicacion", FormMethod.Post))
+    @using (Html.BeginForm("Edit", "Ubicacion", FormMethod.Post, new { @class = "form" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.Id)
 
-        <label for="Nombre">Nombre:</label>
-        @Html.TextBoxFor(m => m.Nombre, new { required = "required" })
-        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label for="Nombre">Nombre:</label>
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", required = "required" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
 
-        <label for="Descripcion">Descripción:</label>
-        @Html.TextAreaFor(m => m.Descripcion, new { rows = 3 })
-        @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label for="Descripcion">Descripción:</label>
+            @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = 3 })
+            @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+        </div>
 
-        <label for="Condiciones">Condiciones:</label>
-        @Html.TextAreaFor(m => m.Condiciones, new { rows = 3 })
-        @Html.ValidationMessageFor(m => m.Condiciones, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label for="Condiciones">Condiciones:</label>
+            @Html.TextAreaFor(m => m.Condiciones, new { @class = "form-control", rows = 3 })
+            @Html.ValidationMessageFor(m => m.Condiciones, "", new { @class = "text-danger" })
+        </div>
 
-        <div class="button-container" style="gap:12px; flex-wrap:wrap;">
-            <button type="submit" class="button">Guardar Cambios</button>
-            <a href="@Url.Action("Index", "Ubicacion")" class="button">Cancelar</a>
+        <div class="button-container" style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="@Url.Action("Index", "Ubicacion")" class="btn btn-default">Cancelar</a>
         </div>
     }
 </div>

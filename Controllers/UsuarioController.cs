@@ -14,44 +14,41 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         {
             using (var api = new ApiClient())
             {
-                var usuarios = await api.GetAsync<List<Usuario>>("api/usuarios") ?? new List<Usuario>();
+                var lista = await api.GetAsync<List<Usuario>>("api/usuarios") ?? new List<Usuario>();
 
                 if (!string.IsNullOrWhiteSpace(q))
                 {
                     var term = q.Trim().ToLower();
-                    usuarios = usuarios.Where(u =>
+                    lista = lista.Where(u =>
                         (u.UserId ?? "").ToLower().Contains(term) ||
                         (u.Nombre ?? "").ToLower().Contains(term) ||
-                        (u.Rol ?? "").ToLower().Contains(term) ||
-                        (u.Correo ?? "").ToLower().Contains(term)
+                        (u.Correo ?? "").ToLower().Contains(term) ||
+                        (u.Rol ?? "").ToLower().Contains(term)
                     ).ToList();
                 }
 
                 ViewBag.Filtro = q;
-                return View(usuarios);
+                return View(lista);
             }
         }
 
-        // CREAR
+        // CREATE
         [HttpGet]
-        public ActionResult Create()
-        {
-            return View(new Usuario { Activo = true });
-        }
+        public ActionResult Create() => View(new Usuario());
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(Usuario usuario)
+        public async Task<ActionResult> Create(Usuario u)
         {
-            if (!ModelState.IsValid) return View(usuario);
+            if (!ModelState.IsValid) return View(u);
 
             using (var api = new ApiClient())
             {
-                var resp = await api.PostAsync("api/usuarios", usuario);
+                var resp = await api.PostAsync("api/usuarios", u);
                 if (!resp.IsSuccessStatusCode)
                 {
                     ModelState.AddModelError("", "No se pudo crear el usuario (API).");
-                    return View(usuario);
+                    return View(u);
                 }
             }
 
@@ -59,7 +56,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return RedirectToAction("Index");
         }
 
-        // EDITAR
+        // EDIT
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
@@ -77,17 +74,17 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Usuario usuario)
+        public async Task<ActionResult> Edit(Usuario u)
         {
-            if (!ModelState.IsValid) return View(usuario);
+            if (!ModelState.IsValid) return View(u);
 
             using (var api = new ApiClient())
             {
-                var resp = await api.PutAsync($"api/usuarios/{usuario.Id}", usuario);
+                var resp = await api.PutAsync($"api/usuarios/{u.Id}", u);
                 if (!resp.IsSuccessStatusCode)
                 {
                     ModelState.AddModelError("", "No se pudo actualizar el usuario (API).");
-                    return View(usuario);
+                    return View(u);
                 }
             }
 
@@ -95,7 +92,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return RedirectToAction("Index");
         }
 
-        // ELIMINAR (integrado con tu modal por GET)
+        // DELETE
         [HttpGet]
         public async Task<ActionResult> Eliminar(int id)
         {
@@ -105,20 +102,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
                 if (!resp.IsSuccessStatusCode)
                     TempData["Error"] = "No se pudo eliminar el usuario (API).";
                 else
-                    TempData["Mensaje"] = "Usuario eliminado correctamente.";
+                    TempData["Mensaje"] = "Usuario eliminado.";
             }
             return RedirectToAction("Index");
-        }
-
-        // PERFIL (lee de Session)
-        [HttpGet]
-        public ActionResult Perfil()
-        {
-            var user = Session["UsuarioLogueado"] as Usuario;
-            if (user == null)
-                return RedirectToAction("Index", "Home");
-
-            return View(user);
         }
     }
 }
