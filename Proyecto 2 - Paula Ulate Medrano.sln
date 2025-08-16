@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proyecto 2 - Paula Ulate Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arca.API", "..\Arca\Arca.API.csproj", "{0EE17B17-10A1-4E4D-8105-1FB04DBDAD18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arca.Shared", "..\Proyecto 2 - Paula Ulate Medrano - Copy\Arca.Shared\Arca.Shared.csproj", "{F5C8EF5C-B1F1-EC72-01FF-1C56563659D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{0EE17B17-10A1-4E4D-8105-1FB04DBDAD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EE17B17-10A1-4E4D-8105-1FB04DBDAD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EE17B17-10A1-4E4D-8105-1FB04DBDAD18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C8EF5C-B1F1-EC72-01FF-1C56563659D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C8EF5C-B1F1-EC72-01FF-1C56563659D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C8EF5C-B1F1-EC72-01FF-1C56563659D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C8EF5C-B1F1-EC72-01FF-1C56563659D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
