@@ -138,7 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositorios\ReporteProgramadoRepository.cs" />
     <Compile Include="Repositorios\UsuarioRepository.cs" />
-    <Compile Include="Services\ApliClient.cs" />
+    <Compile Include="Services\ApiClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -238,8 +238,8 @@
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Proyecto 2 - Paula Ulate Medrano - Copy\Arca.Shared\Arca.Shared.csproj">
-      <Project>{f5c8ef5c-b1f1-ec72-01ff-1c56563659d0}</Project>
+    <ProjectReference Include="Arca.Shared\Arca.Shared.csproj">
+      <Project>{129cdd03-927a-970f-68e7-fe2330ee6151}</Project>
       <Name>Arca.Shared</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,14 +1,11 @@
-﻿/*using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System;
 
-namespace Proyecto_2___Paula_Ulate_Medrano.Models
+namespace Arca.Shared.Models
 {
     public class Semilla
     {
         public int Id { get; set; }
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
         public int EspecieId { get; set; }
         public int UbicacionId { get; set; }
         public int Cantidad { get; set; }
@@ -20,4 +17,4 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Models
         public DateTime? FechaModificacion { get; set; }
         public int? ModificadoPor { get; set; }
     }
-}*/
+}

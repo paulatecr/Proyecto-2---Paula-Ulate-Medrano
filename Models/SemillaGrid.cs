@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,4 +16,4 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Models
         public string NombreEspecie { get; set; }
         public string NombreUbicacion { get; set; }
     }
-}
+}*/
