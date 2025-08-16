@@ -1,141 +1,198 @@
-﻿using Proyecto_2___Paula_Ulate_Medrano.Models;
-using Proyecto_2___Paula_Ulate_Medrano.Repositorios;
+﻿using Arca.Shared.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 {
     public class SemillaController : Controller
     {
-        private readonly SemillaRepository repoSemilla;
-        private readonly EspecieRepository repoEspecie;
-        private readonly UbicacionRepository repoUbicacion;
-
-        public SemillaController()
+        // =========================
+        // LISTADO
+        // =========================
+        [HttpGet]
+        public async Task<ActionResult> Index(int? especieId)
         {
-            var cn = ConfigurationManager.ConnectionStrings["ConexionBaseDatos"].ConnectionString;
-            repoSemilla = new SemillaRepository(cn);
-            repoEspecie = new EspecieRepository(cn);
-            repoUbicacion = new UbicacionRepository(cn);
+            using (var api = new ApiClient())
+            {
+                var semillas = await api.GetAsync<List<Semilla>>("api/semillas");
+                var especies = await api.GetAsync<List<Especie>>("api/especies");
+
+                ViewBag.Especies = new SelectList(especies ?? new List<Especie>(), "Id", "NombreComun", especieId);
+                ViewBag.EspecieIdSeleccionada = especieId;
+
+                if (especieId.HasValue)
+                    semillas = (semillas ?? new List<Semilla>())
+                               .Where(s => s.EspecieId == especieId.Value)
+                               .ToList();
+
+                return View(semillas ?? new List<Semilla>());
+            }
         }
 
-        // GET: Semilla
-        public ActionResult Index(int? especieId)
+        // =========================
+        // CREAR
+        // =========================
+        [HttpGet]
+        public async Task<ActionResult> Create()
         {
-            var semillas = repoSemilla.GetAll();
-            ViewBag.Especies = new SelectList(repoEspecie.GetAll(), "Id", "NombreComun");
-            ViewBag.EspecieIdSeleccionada = especieId;
-
-            if (especieId.HasValue)
-                semillas = semillas.FindAll(s => s.EspecieId == especieId.Value);
-
-            return View(semillas);
+            await CargarCombosAsync();
+            return View(new Semilla
+            {
+                FechaAlmacenamiento = DateTime.Now,
+                Cantidad = 0
+            });
         }
 
-        // GET: Semilla/Create
-        public ActionResult Create()
-        {
-            CargarCombos();
-            return View(new Semilla { FechaAlmacenamiento = DateTime.Now, Cantidad = 0 });
-        }
-
-        // POST: Semilla/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Semilla semilla)
+        public async Task<ActionResult> Create(Semilla semilla)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                semilla.FechaCreacion = DateTime.Now;
-                semilla.CreadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1; 
-
-                repoSemilla.Insert(semilla);
-                TempData["Mensaje"] = "Semilla agregada correctamente.";
-                return RedirectToAction("Index");
+                await CargarCombosAsync(semilla.EspecieId, semilla.UbicacionId);
+                return View(semilla);
             }
 
-            CargarCombos(); 
-            return View(semilla);
-        }
+            // Trazabilidad mínima
+            semilla.FechaCreacion = DateTime.Now;
+            semilla.CreadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1;
 
-        // GET: Semilla/Edit/5
-        public ActionResult Edit(int id)
-        {
-            var semilla = repoSemilla.GetById(id);
-            if (semilla == null)
+            using (var api = new ApiClient())
             {
-                TempData["Error"] = "Semilla no encontrada.";
-                return RedirectToAction("Index");
+                var resp = await api.PostAsync("api/semillas", semilla);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError("", "No se pudo crear la semilla (API).");
+                    await CargarCombosAsync(semilla.EspecieId, semilla.UbicacionId);
+                    return View(semilla);
+                }
             }
-            CargarCombos();
-            return View(semilla);
+
+            TempData["Mensaje"] = "Semilla agregada correctamente.";
+            return RedirectToAction("Index");
         }
 
-        // POST: Semilla/Edit
+        // =========================
+        // EDITAR
+        // =========================
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id)
+        {
+            using (var api = new ApiClient())
+            {
+                var semilla = await api.GetAsync<Semilla>($"api/semillas/{id}");
+                if (semilla == null)
+                {
+                    TempData["Error"] = "Semilla no encontrada.";
+                    return RedirectToAction("Index");
+                }
+                await CargarCombosAsync(semilla.EspecieId, semilla.UbicacionId);
+                return View(semilla);
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Semilla semilla)
+        public async Task<ActionResult> Edit(Semilla semilla)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                semilla.FechaModificacion = DateTime.Now;
-                semilla.ModificadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1;
-
-                repoSemilla.Update(semilla);
-                TempData["Mensaje"] = "Semilla actualizada correctamente.";
-                return RedirectToAction("Index");
+                await CargarCombosAsync(semilla.EspecieId, semilla.UbicacionId);
+                return View(semilla);
             }
 
-            CargarCombos();
-            return View(semilla);
+            semilla.FechaModificacion = DateTime.Now;
+            semilla.ModificadoPor = (Session["UsuarioLogueado"] as Usuario)?.Id ?? 1;
+
+            using (var api = new ApiClient())
+            {
+                var resp = await api.PutAsync($"api/semillas/{semilla.Id}", semilla);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    ModelState.AddModelError("", "No se pudo actualizar la semilla (API).");
+                    await CargarCombosAsync(semilla.EspecieId, semilla.UbicacionId);
+                    return View(semilla);
+                }
+            }
+
+            TempData["Mensaje"] = "Semilla actualizada correctamente.";
+            return RedirectToAction("Index");
         }
 
-        // GET: Semilla/Eliminar
-        public ActionResult Eliminar(int id)
+        // =========================
+        // ELIMINAR (GET para tu flujo actual)
+        // =========================
+        [HttpGet]
+        public async Task<ActionResult> Eliminar(int id)
         {
-            var s = repoSemilla.GetById(id);
-            if (s == null)
+            using (var api = new ApiClient())
             {
-                TempData["Error"] = "Semilla no encontrada.";
-            }
-            else
-            {
-                repoSemilla.Delete(id);
-                TempData["Mensaje"] = "Semilla eliminada correctamente.";
+                var resp = await api.DeleteAsync($"api/semillas/{id}");
+                if (!resp.IsSuccessStatusCode)
+                    TempData["Error"] = "No se pudo eliminar la semilla (API).";
+                else
+                    TempData["Mensaje"] = "Semilla eliminada correctamente.";
             }
             return RedirectToAction("Index");
         }
 
-        private void CargarCombos()
+        // =========================
+        // INVENTARIO (GRID con nombres)
+        // =========================
+        [HttpGet]
+        public async Task<ActionResult> Inventario()
         {
-            ViewBag.Especies = new SelectList(repoEspecie.GetAll(), "Id", "NombreComun");
-            ViewBag.Ubicaciones = new SelectList(repoUbicacion.GetAll(), "Id", "Nombre");
-        }
-
-        public ActionResult Inventario()
-        {
-            var lista = repoSemilla.GetAllWithNames(); 
-            return View(lista);
-        }
-
-        public ActionResult Detalle(int id)
-        {
-            var s = repoSemilla.GetById(id);
-            if (s == null)
+            using (var api = new ApiClient())
             {
-                TempData["Error"] = "Semilla no encontrada.";
-                return RedirectToAction("Inventario");
+                var lista = await api.GetAsync<List<SemillaGrid>>("api/semillas/grid");
+                return View(lista ?? new List<SemillaGrid>());
             }
+        }
 
-            var e = repoEspecie.GetById(s.EspecieId);
-            var u = repoUbicacion.GetById(s.UbicacionId);
-            ViewBag.NombreEspecie = e?.NombreComun ?? e?.NombreCientifico ?? $"Especie #{s.EspecieId}";
-            ViewBag.NombreUbicacion = u?.Nombre ?? $"Ubicación #{s.UbicacionId}";
+        // =========================
+        // DETALLE (solo lectura)
+        // =========================
+        [HttpGet]
+        public async Task<ActionResult> Detalle(int id)
+        {
+            using (var api = new ApiClient())
+            {
+                var s = await api.GetAsync<Semilla>($"api/semillas/{id}");
+                if (s == null)
+                {
+                    TempData["Error"] = "Semilla no encontrada.";
+                    return RedirectToAction("Inventario");
+                }
 
-            return View("Detalle", s); 
+                var especies = await api.GetAsync<List<Especie>>("api/especies");
+                var ubicaciones = await api.GetAsync<List<Ubicacion>>("api/ubicaciones");
 
+                var e = especies?.FirstOrDefault(x => x.Id == s.EspecieId);
+                var u = ubicaciones?.FirstOrDefault(x => x.Id == s.UbicacionId);
+
+                ViewBag.NombreEspecie = e?.NombreComun ?? e?.NombreCientifico ?? $"Especie #{s.EspecieId}";
+                ViewBag.NombreUbicacion = u?.Nombre ?? $"Ubicación #{s.UbicacionId}";
+
+                return View("Detalle", s);
+            }
+        }
+
+        // =========================
+        // Helpers
+        // =========================
+        private async Task CargarCombosAsync(int? especieId = null, int? ubicacionId = null)
+        {
+            using (var api = new ApiClient())
+            {
+                var especies = await api.GetAsync<List<Especie>>("api/especies");
+                var ubicaciones = await api.GetAsync<List<Ubicacion>>("api/ubicaciones");
+
+                ViewBag.Especies = new SelectList(especies ?? new List<Especie>(), "Id", "NombreComun", especieId);
+                ViewBag.Ubicaciones = new SelectList(ubicaciones ?? new List<Ubicacion>(), "Id", "Nombre", ubicacionId);
+            }
         }
     }
 }
