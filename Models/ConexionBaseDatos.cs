@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -22,4 +22,4 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Models.LogicaDatos
             return new SqlConnection(cadenaConexion);
         }
     }
-}
+}*/

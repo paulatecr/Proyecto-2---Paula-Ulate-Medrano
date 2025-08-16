@@ -1,18 +1,18 @@
-﻿//namespace Arca.Shared.Models
-//{
-  //  public class ConexionBaseDatos
-   // {
-     //   private readonly string cadenaConexion;
+﻿/*namespace Arca.Shared.Models
+{
+    public class ConexionBaseDatos
+    {
+       private readonly string cadenaConexion;
 
-     //   public ConexionBaseDatos()
-       // {
+       public ConexionBaseDatos()
+        {
             // Lee la cadena desde Web.config
-      //      cadenaConexion = ConfigurationManager.ConnectionStrings["ConexionBaseDatos"].ConnectionString;
-      //  }
+            cadenaConexion = ConfigurationManager.ConnectionStrings["ConexionBaseDatos"].ConnectionString;
+        }
 
-      //  public SqlConnection ObtenerConexion()
-      //  {
-      //      return new SqlConnection(cadenaConexion);
-     // }
-    //}
-//}
+        public SqlConnection ObtenerConexion()
+        {
+            return new SqlConnection(cadenaConexion);
+      }
+    }
+}*/
