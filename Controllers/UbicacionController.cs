@@ -104,7 +104,6 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
                 else
                     TempData["Mensaje"] = "Ubicación eliminada.";
             }
-            return RedirectToAction("Index");
         }
     }
 }
