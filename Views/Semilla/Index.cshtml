@@ -54,15 +54,15 @@
                     <tr>
                         <td>@s.Id</td>
                         <td>
-                            <a href="@Url.Action("Edit", "Semilla", new { id = s.Id })">
+                            <a href="@Url.Action("Detalle", "Semilla", new { id = s.Id })">
                                 @s.Nombre
                             </a>
                         </td>
-                        <td>@s.EspecieId</td>
-                        <td>@s.UbicacionId</td>
+                        <td>@(ViewBag.NombreEspecie ?? s.EspecieId.ToString())</td>
+                        <td>@(ViewBag.NombreUbicacion ?? s.UbicacionId.ToString())</td>
                         <td>@s.Cantidad</td>
                         <td>@s.FechaAlmacenamiento.ToString("yyyy-MM-dd")</td>
-                        <td><a href="@Url.Action("Edit", "Semilla", new { id = s.Id })" class="button">✏️</a></td>
+                        <td><a href="@Url.Action("Detalle", "Semilla", new { id = s.Id })" class="button">✏️</a></td>
                         <td><button class="button btn-eliminar" data-id="@s.Id" data-nombre="@s.Nombre">🗑️</button></td>
                     </tr>
                 }

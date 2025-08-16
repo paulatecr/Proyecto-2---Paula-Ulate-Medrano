@@ -1,0 +1,34 @@
+﻿@using Arca.Shared.Models
+@model Arca.Shared.Models.Especie
+
+@{
+    ViewBag.Title = "Detalle de Especie";
+}
+
+<div class="form-container">
+    <h1>@ViewBag.Title</h1>
+
+    <div class="form-row-inline">
+        <label>Nombre Científico: </label>
+        <p>@Model.NombreCientifico)</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Nombre Común: </label>
+        <p>@(Model.NombreComun)</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Familia: </label>
+        <p>@(Model.Familia)</p>
+    </div>
+
+    <div class="form-row-inline">
+        <label>Descripcion: </label>
+        <p>@(Model.Descripcion)</p>
+    </div>
+
+    <div class="button-container">
+        <a href="@Url.Action("Inventario", "Semilla")" class="button">Volver</a>
+    </div>
+</div>

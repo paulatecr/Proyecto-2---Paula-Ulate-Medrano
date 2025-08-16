@@ -46,8 +46,7 @@
                     <th>Rol</th>
                     @if (esAdmin)
                     {
-                        <th>Editar</th>
-                        <th>Eliminar</th>
+                      
                     }
                 </tr>
             </thead>
@@ -63,12 +62,6 @@
                         <td>@item.Rol</td>
                         @if (esAdmin)
                         {
-                            <td>
-                                <a href="@Url.Action("Edit", "Usuario", new { id = item.Id })" class="button" title="Editar">✏️</a>
-                            </td>
-                            <td>
-                                <button class="button btn-eliminar" data-id="@item.Id" data-nombre="@item.UserID">🗑️</button>
-                            </td>
                         }
                     </tr>
                 }

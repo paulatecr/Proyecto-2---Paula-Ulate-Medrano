@@ -206,6 +206,7 @@
     <Content Include="Views\Ubicacion\Edit.cshtml" />
     <Content Include="Views\Semilla\Inventario.cshtml" />
     <Content Include="Views\Semilla\Detalle.cshtml" />
+    <Content Include="Views\Especie\Detalle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
