@@ -1,9 +1,9 @@
 ﻿using Arca.Shared.Models;
+using Proyecto_2___Paula_Ulate_Medrano.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Proyecto_2___Paula_Ulate_Medrano.Services;
 
 namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 {
@@ -104,6 +104,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
                 else
                     TempData["Mensaje"] = "Ubicación eliminada.";
             }
+            return RedirectToAction("Index");
         }
     }
 }

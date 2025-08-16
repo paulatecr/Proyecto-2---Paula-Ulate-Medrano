@@ -1,5 +1,5 @@
-﻿
-@model List<Proyecto_2___Paula_Ulate_Medrano.Models.Especie>
+﻿@using Arca.Shared.Models
+@model List<Arca.Shared.Models.Especie>
 @using System.Linq
 
 @{
@@ -58,7 +58,7 @@
                     <tr>
                         <td>@item.Id</td>
                         <td>
-                            <a href="@Url.Action("Detalle", "Especie", new { id = item.Id })" >@item.NombreCientifico</a>
+                            <a href="@Url.Action("Detalle", "Especie", new { id = item.Id })">@item.NombreCientifico</a>
                         </td>
                         <td>@item.NombreComun</td>
                         <td>@item.Familia</td>
