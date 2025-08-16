@@ -1,38 +1,39 @@
 ﻿@model List<Arca.Shared.Models.Usuario>
+@using System.Linq
 
 @{
-    ViewBag.Title = "Lista de Usuarios";
-    var usuarioSesion = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
-    bool esAdmin = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
+    ViewBag.Title = "Usuarios Existentes";
+    var usuarioSesion = Session["UsuarioLogueado"] as Arca.Shared.Models.Usuario;
+    bool puedeEditar = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 }
 
+<h1 class="h1-Index">Usuarios Existentes</h1>
 
-<h1 class="h1-Index">Usuarios Registrados</h1>
-
-@if (esAdmin)
+@if (TempData["Mensaje"] != null)
 {
-    <div class="button-container" style="margin-top: 30px;">
+    <p style="color: green; text-align: center;">@TempData["Mensaje"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p style="color: red; text-align: center;">@TempData["Error"]</p>
+}
+
+@if (puedeEditar)
+{
+    <div class="button-container" style="margin-top: 20px;">
         @Html.ActionLink("Crear Nuevo Usuario", "Create", "Usuario", null, new { @class = "button" })
     </div>
 }
+<br />
 
 <div class="form-container">
-    @if (TempData["Mensaje"] != null)
-    {
-        <p style="color: green; text-align: center;">@TempData["Mensaje"]</p>
-    }
-    @if (TempData["Error"] != null)
-    {
-        <p style="color: red; text-align: center;">@TempData["Error"]</p>
-    }
-
-    <div style="margin: 20px auto; text-align: center;">
-        <label for="busqueda">Buscar por ID, Nombre, Correo o Rol:</label>
+    <div style="margin: 10px auto; text-align: center;">
+        <label for="busqueda">Buscar por Usuario, Nombre o Rol:</label>
         <input type="text" id="busqueda" placeholder="Ingrese texto para filtrar" style="width: 80%;" />
     </div>
 </div>
 
-@if (Model != null && Model.Count > 0)
+@if (Model != null && Model.Any())
 {
     <div id="datoTabla">
         <table id="tablaUsuarios">
@@ -44,7 +45,8 @@
                     <th>Correo</th>
                     <th>Contraseña</th>
                     <th>Rol</th>
-                    @if (esAdmin)
+                    <th>Activo</th>
+                    @if (puedeEditar)
                     {
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -56,18 +58,20 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.UserID</td>
+                        <td>@item.UserId</td>
                         <td>@item.Nombre</td>
                         <td>@item.Correo</td>
                         <td>@item.Contrasena</td>
                         <td>@item.Rol</td>
-                        @if (esAdmin)
+                        <td>@(item.Activo ? "Sí" : "No")</td>
+
+                        @if (puedeEditar)
                         {
                             <td>
                                 <a href="@Url.Action("Edit", "Usuario", new { id = item.Id })" class="button" title="Editar">✏️</a>
                             </td>
                             <td>
-                                <button class="button btn-eliminar" data-id="@item.Id" data-nombre="@item.UserID">🗑️</button>
+                                <button class="button btn-eliminar" data-id="@item.Id" data-nombre="@item.UserId">🗑️</button>
                             </td>
                         }
                     </tr>
@@ -78,10 +82,10 @@
 }
 else
 {
-    <p style="text-align: center;">No hay usuarios registrados.</p>
+    <p style="text-align:center;">No hay usuarios registrados.</p>
 }
 
-<!-- Modal de Confirmación -->
+<!-- Modal Confirmación -->
 <div id="modalConfirmacion" class="modal">
     <div class="modal-contenido">
         <h3>Confirmar eliminación</h3>
@@ -95,8 +99,20 @@ else
 
 @section scripts {
     <script>
-        let idSeleccionado = "";
+        // Buscar
+        document.getElementById("busqueda").addEventListener("keyup", function () {
+            var texto = this.value.toLowerCase();
+            var filas = document.querySelectorAll("#tablaUsuarios tbody tr");
+            filas.forEach(function (fila) {
+                var usuario = fila.cells[1].textContent.toLowerCase();
+                var nombre = fila.cells[2].textContent.toLowerCase();
+                var rol = fila.cells[5].textContent.toLowerCase();
+                fila.style.display = (usuario.includes(texto) || nombre.includes(texto) || rol.includes(texto)) ? "" : "none";
+            });
+        });
 
+        // Eliminar
+        let idSeleccionado = 0;
         document.querySelectorAll(".btn-eliminar").forEach(btn => {
             btn.addEventListener("click", function () {
                 idSeleccionado = this.getAttribute("data-id");
@@ -113,26 +129,5 @@ else
         function cerrarModal() {
             document.getElementById("modalConfirmacion").style.display = "none";
         }
-
-        document.getElementById("busqueda").addEventListener("keyup", function () {
-            var texto = this.value.toLowerCase();
-            var filas = document.querySelectorAll("#tablaUsuarios tbody tr");
-
-            filas.forEach(function (fila) {
-                var id = fila.cells[0].textContent.toLowerCase();
-                var usuario = fila.cells[1].textContent.toLowerCase();
-                var nombre = fila.cells[2].textContent.toLowerCase();
-                var correo = fila.cells[3].textContent.toLowerCase();
-                var rol = fila.cells[5].textContent.toLowerCase();
-
-                fila.style.display = (
-                    id.includes(texto) ||
-                    usuario.includes(texto) ||
-                    nombre.includes(texto) ||
-                    correo.includes(texto) ||
-                    rol.includes(texto)
-                ) ? "" : "none";
-            });
-        });
     </script>
 }

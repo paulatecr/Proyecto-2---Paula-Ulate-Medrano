@@ -1,25 +1,33 @@
-﻿
-@model Arca.Shared.Models.Usuario
+﻿@model Arca.Shared.Models.Usuario
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Crear Usuario";
 }
 
-@using (Html.BeginForm("Create", "Usuario", FormMethod.Post))
-{
-    <div class="form-container">
-        <h1>Crear Usuario</h1>
-        <label for="UserId">Usuario ID:</label>
-        @Html.TextBoxFor(m => m.UserID, new { required = "required" })
+<div class="form-container">
+    <h1>Crear Usuario</h1>
+
+    @Html.ValidationSummary(excludePropertyErrors: true, message: "", htmlAttributes: new { @class = "text-danger", style = "text-align:center;" })
+
+    @using (Html.BeginForm("Create", "Usuario", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <label for="UserId">Usuario Id:</label>
+        @Html.TextBoxFor(m => m.UserId, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.UserId, "", new { @class = "text-danger" })
 
         <label for="Nombre">Nombre:</label>
         @Html.TextBoxFor(m => m.Nombre, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
 
         <label for="Correo">Correo:</label>
         @Html.TextBoxFor(m => m.Correo, new { required = "required", type = "email" })
+        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
 
         <label for="Contrasena">Contraseña:</label>
         @Html.PasswordFor(m => m.Contrasena, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Contrasena, "", new { @class = "text-danger" })
 
         <label for="Rol">Rol:</label>
         @Html.DropDownListFor(m => m.Rol,
@@ -29,9 +37,14 @@
             }, "Value", "Text"),
             "-- Seleccione un rol --",
             new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.Rol, "", new { @class = "text-danger" })
 
-        <div class="button-container">
+        <label for="Activo">Activo:</label>
+        @Html.CheckBoxFor(m => m.Activo, new { @checked = "checked" })
+
+        <div class="button-container" style="gap:12px; flex-wrap:wrap;">
             <button type="submit" class="button">Registrar</button>
+            <a href="@Url.Action("Index","Usuario")" class="button">Cancelar</a>
         </div>
-    </div>
-}
+    }
+</div>
