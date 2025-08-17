@@ -124,7 +124,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         }
 
         // =========================
-        // ELIMINAR (GET para tu flujo actual)
+        // ELIMINAR 
         // =========================
         [HttpGet]
         public async Task<ActionResult> Eliminar(int id)
@@ -141,7 +141,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         }
 
         // =========================
-        // INVENTARIO (GRID con nombres)
+        // INVENTARIO
         // =========================
         [HttpGet]
         public async Task<ActionResult> Inventario()
@@ -154,7 +154,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
         }
 
         // =========================
-        // DETALLE (solo lectura)
+        // DETALLE 
         // =========================
         [HttpGet]
         public async Task<ActionResult> Detalle(int id)

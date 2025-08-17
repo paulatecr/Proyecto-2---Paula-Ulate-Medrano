@@ -9,7 +9,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 {
     public class UsuarioController : Controller
     {
-        // LISTA
+        // =========================
+        // LISTADO
+        // =========================
         [HttpGet]
         public async Task<ActionResult> Index(string q = null)
         {
@@ -33,7 +35,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             }
         }
 
+        // =========================
         // CREATE
+        // =========================
         [HttpGet]
         public ActionResult Create() => View(new Usuario { Activo = true });
 
@@ -58,7 +62,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return RedirectToAction("Index");
         }
 
-        // EDIT
+        // =========================
+        // EDITAR
+        // =========================
         [HttpGet]
         public async Task<ActionResult> Edit(int id)
         {
@@ -95,7 +101,9 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return RedirectToAction("Index");
         }
 
+        // =========================
         // DELETE
+        // =========================
         [HttpGet]
         public async Task<ActionResult> Eliminar(int id)
         {
@@ -110,11 +118,13 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
             return RedirectToAction("Index");
         }
 
-        // PERFIL (usa el tipo de Arca.Shared)
+        // =========================
+        // PERFIL
+        // =========================
         [HttpGet]
         public ActionResult Perfil()
         {
-            var user = Session["UsuarioLogueado"] as Usuario; // <-- Arca.Shared.Models.Usuario
+            var user = Session["UsuarioLogueado"] as Usuario; 
             if (user == null)
                 return RedirectToAction("Index", "Home");
 

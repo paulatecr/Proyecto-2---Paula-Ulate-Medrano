@@ -136,7 +136,7 @@ namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
                     TempData["Error"] = "Especie no encontrada.";
                     return RedirectToAction("Index");
                 }
-                return View(especie); // Crea una vista Detalle si la usarás
+                return View(especie); 
             }
         }
     }
