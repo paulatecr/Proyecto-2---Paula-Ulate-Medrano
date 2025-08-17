@@ -1,4 +1,4 @@
-﻿@using Arca.Shared.Models
+﻿
 @model Arca.Shared.Models.Especie
 
 @{
@@ -8,27 +8,40 @@
 <div class="form-container">
     <h1>Registrar Especie</h1>
 
+    @if (TempData["Error"] != null)
+    {
+        <p style="color:red; text-align:center;">@TempData["Error"]</p>
+    }
+    @if (TempData["Mensaje"] != null)
+    {
+        <p style="color:green; text-align:center;">@TempData["Mensaje"]</p>
+    }
+
+    @Html.ValidationSummary(excludePropertyErrors: true, message: "", htmlAttributes: new { @class = "text-danger", style = "text-align:center;" })
+
     @using (Html.BeginForm("Create", "Especie", FormMethod.Post))
     {
+        @Html.AntiForgeryToken()
+
         <label for="NombreCientifico">Nombre Científico:</label>
         @Html.TextBoxFor(m => m.NombreCientifico, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.NombreCientifico, "", new { @class = "text-danger" })
 
         <label for="NombreComun">Nombre Común:</label>
         @Html.TextBoxFor(m => m.NombreComun, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.NombreComun, "", new { @class = "text-danger" })
 
         <label for="Familia">Familia:</label>
         @Html.TextBoxFor(m => m.Familia, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Familia, "", new { @class = "text-danger" })
 
         <label for="Descripcion">Descripción:</label>
         @Html.TextAreaFor(m => m.Descripcion, new { rows = 4 })
+        @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
 
-        <div class="button-container">
+        <div class="button-container" style="gap:12px; flex-wrap:wrap;">
             <button type="submit" class="button">Registrar</button>
-        </div>
-
-        <div class="button-container">
             <a href="@Url.Action("Index","Especie")" class="button">Cancelar</a>
         </div>
     }
 </div>
-

@@ -128,16 +128,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\SemillaGrid.cs" />
-    <Compile Include="Models\ConexionBaseDatos.cs" />
-    <Compile Include="Models\Especie.cs" />
-    <Compile Include="Models\ReporteProgramado.cs" />
-    <Compile Include="Models\Semilla.cs" />
-    <Compile Include="Models\Ubicacion.cs" />
-    <Compile Include="Models\Usuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositorios\ReporteProgramadoRepository.cs" />
-    <Compile Include="Repositorios\UsuarioRepository.cs" />
     <Compile Include="Services\ApiClient.cs" />
   </ItemGroup>
   <ItemGroup>

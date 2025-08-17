@@ -1,37 +1,62 @@
-﻿
-@model Arca.Shared.Models.Usuario
+﻿@model Arca.Shared.Models.Usuario
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Registrar Usuario";
 }
 
-@using (Html.BeginForm("Create", "Usuario", FormMethod.Post))
-{
-    <div class="form-container">
-        <h1>Crear Usuario</h1>
-        <label for="UserId">Usuario Id:</label>
+<div class="form-container">
+    <h1>Registrar Usuario</h1>
+
+    @if (TempData["Error"] != null)
+    {
+        <p style="color:red; text-align:center;">@TempData["Error"]</p>
+    }
+    @if (TempData["Mensaje"] != null)
+    {
+        <p style="color:green; text-align:center;">@TempData["Mensaje"]</p>
+    }
+
+    @Html.ValidationSummary(excludePropertyErrors: true, message: "", htmlAttributes: new { @class = "text-danger", style = "text-align:center;" })
+
+    @using (Html.BeginForm("Create", "Usuario", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <label for="UserID">Usuario Id:</label>
         @Html.TextBoxFor(m => m.UserId, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.UserId, "", new { @class = "text-danger" })
 
         <label for="Nombre">Nombre:</label>
         @Html.TextBoxFor(m => m.Nombre, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
 
         <label for="Correo">Correo:</label>
         @Html.TextBoxFor(m => m.Correo, new { required = "required", type = "email" })
+        @Html.ValidationMessageFor(m => m.Correo, "", new { @class = "text-danger" })
 
         <label for="Contrasena">Contraseña:</label>
         @Html.PasswordFor(m => m.Contrasena, new { required = "required" })
+        @Html.ValidationMessageFor(m => m.Contrasena, "", new { @class = "text-danger" })
 
         <label for="Rol">Rol:</label>
-        @Html.DropDownListFor(m => m.Rol,
-            new SelectList(new[] {
-                new { Value = "Administrador", Text = "Administrador" },
-                new { Value = "Usuario", Text = "Usuario" },
-            }, "Value", "Text"),
+        @Html.DropDownListFor(
+            m => m.Rol,
+            new List<SelectListItem> {
+                new SelectListItem { Value = "Administrador", Text = "Administrador" },
+                new SelectListItem { Value = "Usuario",        Text = "Usuario" }
+            },
             "-- Seleccione un rol --",
-            new { @class = "form-control", required = "required" })
+            new { @class = "form-control", required = "required" }
+        )
+        @Html.ValidationMessageFor(m => m.Rol, "", new { @class = "text-danger" })
 
-        <div class="button-container">
-            <button type="submit" class="button">Registrar</button>
+        <div class="checkbox" style="margin:10px 0;">
+            <label>@Html.CheckBoxFor(m => m.Activo) Activo</label>
         </div>
-    </div>
-}
+
+        <div class="button-container" style="gap:12px; flex-wrap:wrap;">
+            <button type="submit" class="button">Registrar</button>
+            <a href="@Url.Action("Index","Usuario")" class="button">Cancelar</a>
+        </div>
+    }
+</div>
