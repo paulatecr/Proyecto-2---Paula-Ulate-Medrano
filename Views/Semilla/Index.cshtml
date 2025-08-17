@@ -3,92 +3,95 @@
 @using System.Linq
 
 @{
-    ViewBag.Title = "Inventario de Semillas";
+    ViewBag.Title = "Gestión de Semillas";
     var especies = ViewBag.Especies as SelectList;
     int? especieIdSel = ViewBag.EspecieIdSeleccionada as int?;
+    var usuarioSesion = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
+    bool puedeEditar = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 }
 
-<h1 class="h1-Index">Inventario de Semillas</h1>
+<h1 class="h1-Index">Gestión de Semillas</h1>
 
-<div class="button-container" style="margin-top:30px;">
-    @Html.ActionLink("Agregar Semilla", "Create", "Semilla", null, new { @class = "button" })
-</div>
-
-<div class="form-container">
-    @if (TempData["Mensaje"] != null)
-    {<p style="color:green;text-align:center;">@TempData["Mensaje"]</p>}
-    @if (TempData["Error"] != null)
-    {<p style="color:red;text-align:center;">@TempData["Error"]</p>}
-
-    <div style="margin: 10px auto; text-align:center;">
-        <label for="filtroEspecie">Filtrar por especie:</label>
-        @Html.DropDownList("filtroEspecie", especies, "-- Todas --",
-            new { @class = "form-control", style = "max-width:300px;display:inline-block;" })
-    </div>
-
-    <div style="margin: 10px auto; text-align:center;">
-        <label for="busqueda">Buscar por nombre:</label>
-        <input type="text" id="busqueda" placeholder="Ingrese texto para filtrar" style="width:80%;" />
-    </div>
-</div>
-
-@if (Model != null && Model.Any())
+@if (puedeEditar)
 {
-    <div id="datoTabla">
-        <table id="tablaSemillas">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Especie</th>
-                    <th>Ubicación</th>
-                    <th>Cantidad</th>
-                    <th>Fecha Almacenamiento</th>
-                    <th>Editar</th>
-                    <th>Eliminar</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var s in Model)
-                {
-                    <tr>
-                        <td>@s.Id</td>
-                        <td>
-                            <a href="@Url.Action("Detalle", "Semilla", new { id = s.Id })">
-                                @s.Nombre
-                            </a>
-                        </td>
-                        <td>@(ViewBag.NombreEspecie ?? s.EspecieId.ToString())</td>
-                        <td>@(ViewBag.NombreUbicacion ?? s.UbicacionId.ToString())</td>
-                        <td>@s.Cantidad</td>
-                        <td>@s.FechaAlmacenamiento.ToString("yyyy-MM-dd")</td>
-                        <td><a href="@Url.Action("Detalle", "Semilla", new { id = s.Id })" class="button">✏️</a></td>
-                        <td><button class="button btn-eliminar" data-id="@s.Id" data-nombre="@s.Nombre">🗑️</button></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div class="button-container" style="margin-top:30px;">
+        @Html.ActionLink("Agregar Semilla", "Create", "Semilla", null, new { @class = "button" })
     </div>
 }
-else
-{
-    <p style="text-align:center;">No hay semillas registradas.</p>
-}
 
-<!-- Modal Confirmación -->
-<div id="modalConfirmacion" class="modal">
-    <div class="modal-contenido">
-        <h3>Confirmar eliminación</h3>
-        <p id="textoModal"></p>
-        <div style="text-align:center;margin-top:20px;">
-            <button class="button" id="btnConfirmarEliminar">Eliminar</button>
-            <button class="button" onclick="cerrarModal()">Cancelar</button>
+    <div class="form-container">
+        @if (TempData["Mensaje"] != null)
+        {<p style="color:green;text-align:center;">@TempData["Mensaje"]</p>}
+        @if (TempData["Error"] != null)
+        {<p style="color:red;text-align:center;">@TempData["Error"]</p>}
+
+        <div style="margin: 10px auto; text-align:center;">
+            <label for="filtroEspecie">Filtrar por especie:</label>
+            @Html.DropDownList("filtroEspecie", especies, "-- Todas --",
+                new { @class = "form-control", style = "max-width:300px;display:inline-block;" })
+        </div>
+
+        <div style="margin: 10px auto; text-align:center;">
+            <label for="busqueda">Buscar por nombre:</label>
+            <input type="text" id="busqueda" placeholder="Ingrese texto para filtrar" style="width:80%;" />
         </div>
     </div>
-</div>
 
-@section scripts {
-    <script>
+    @if (Model != null && Model.Any())
+    {
+        <div id="datoTabla">
+            <table id="tablaSemillas">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Especie</th>
+                        <th>Ubicación</th>
+                        <th>Cantidad</th>
+                        <th>Fecha Almacenamiento</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>@s.Id</td>
+                            <td>
+                                <a href="@Url.Action("Detalle", "Semilla", new { id = s.Id })">@s.Nombre</a>
+                            </td>
+                            <td>@(ViewBag.NombreEspecie ?? s.EspecieId.ToString())</td>
+                            <td>@(ViewBag.NombreUbicacion ?? s.UbicacionId.ToString())</td>
+                            <td>@s.Cantidad</td>
+                            <td>@s.FechaAlmacenamiento.ToString("dd-MMM-yyyy")</td>
+                            <td><a href="@Url.Action("Edit", "Semilla", new { id = s.Id })" class="button">✏️</a></td>
+                            <td><button class="button btn-eliminar" data-id="@s.Id" data-nombre="@s.Nombre">🗑️</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p style="text-align:center;">No hay semillas registradas.</p>
+    }
+
+    <!-- Modal Confirmación -->
+    <div id="modalConfirmacion" class="modal">
+        <div class="modal-contenido">
+            <h3>Confirmar eliminación</h3>
+            <p id="textoModal"></p>
+            <div style="text-align:center;margin-top:20px;">
+                <button class="button" id="btnConfirmarEliminar">Eliminar</button>
+                <button class="button" onclick="cerrarModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    @section scripts {
+        <script>
     // Prefijar selección si viene por query (opcional)
     const dd = document.getElementById("filtroEspecie");
     if (@(especieIdSel.HasValue ? "true" : "false")) {
@@ -127,6 +130,6 @@ else
     function cerrarModal() {
         document.getElementById("modalConfirmacion").style.display = "none";
     }
-    </script>
-}
+        </script>
+    }
 
