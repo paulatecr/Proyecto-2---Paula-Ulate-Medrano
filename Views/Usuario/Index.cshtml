@@ -1,8 +1,8 @@
-﻿@model List<Proyecto_2___Paula_Ulate_Medrano.Models.Usuario>
+﻿@model List< Arca.Shared.Models.Usuario>
 
 @{
     ViewBag.Title = "Lista de Usuarios";
-    var usuarioSesion = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
+    var usuarioSesion = Session["UsuarioLogueado"] as Arca.Shared.Models.Usuario; ;
     bool esAdmin = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 }
 
@@ -55,7 +55,7 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.UserID</td>
+                        <td>@item.UserId</td>
                         <td>@item.Nombre</td>
                         <td>@item.Correo</td>
                         <td>@item.Contrasena</td>

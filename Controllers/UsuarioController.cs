@@ -1,54 +1,120 @@
-﻿using Proyecto_2___Paula_Ulate_Medrano.Models;
-using Proyecto_2___Paula_Ulate_Medrano.Repositorios;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Arca.Shared.Models;
 using Proyecto_2___Paula_Ulate_Medrano.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Proyecto_2___Paula_Ulate_Medrano.Controllers
 {
     public class UsuarioController : Controller
     {
-        private readonly UsuarioRepository repositorio;
-
-        public UsuarioController()
+        // LISTA
+        [HttpGet]
+        public async Task<ActionResult> Index(string q = null)
         {
-            var connectionString = ConfigurationManager
-                .ConnectionStrings["ConexionBaseDatos"]
-                .ConnectionString;
+            using (var api = new ApiClient())
+            {
+                var lista = await api.GetAsync<List<Usuario>>("api/usuarios") ?? new List<Usuario>();
 
-            repositorio = new UsuarioRepository(connectionString);
-        }
-        public ActionResult Index()
-        {
-            var listaUsuarios = repositorio.GetAll();
-            return View(listaUsuarios);
+                if (!string.IsNullOrWhiteSpace(q))
+                {
+                    var term = q.Trim().ToLower();
+                    lista = lista.Where(u =>
+                        (u.UserId ?? "").ToLower().Contains(term) ||
+                        (u.Nombre ?? "").ToLower().Contains(term) ||
+                        (u.Correo ?? "").ToLower().Contains(term) ||
+                        (u.Rol ?? "").ToLower().Contains(term)
+                    ).ToList();
+                }
+
+                ViewBag.Filtro = q;
+                return View(lista);
+            }
         }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
+        // CREATE
+        [HttpGet]
+        public ActionResult Create() => View(new Usuario { Activo = true });
 
         [HttpPost]
-        public ActionResult Create(Usuario usuario)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create(Usuario u)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(u);
+
+            using (var api = new ApiClient())
             {
-                repositorio.Insert(usuario);
-                return RedirectToAction("Index");
+                var resp = await api.PostAsync("api/usuarios", u);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    var err = await resp.Content.ReadAsStringAsync();
+                    ModelState.AddModelError("", $"No se pudo crear el usuario (API). {err}");
+                    return View(u);
+                }
             }
 
-            return View(usuario);
+            TempData["Mensaje"] = "Usuario creado correctamente.";
+            return RedirectToAction("Index");
         }
 
+        // EDIT
+        [HttpGet]
+        public async Task<ActionResult> Edit(int id)
+        {
+            using (var api = new ApiClient())
+            {
+                var model = await api.GetAsync<Usuario>($"api/usuarios/{id}");
+                if (model == null)
+                {
+                    TempData["Error"] = "Usuario no encontrado.";
+                    return RedirectToAction("Index");
+                }
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(Usuario u)
+        {
+            if (!ModelState.IsValid) return View(u);
+
+            using (var api = new ApiClient())
+            {
+                var resp = await api.PutAsync($"api/usuarios/{u.Id}", u);
+                if (!resp.IsSuccessStatusCode)
+                {
+                    var err = await resp.Content.ReadAsStringAsync();
+                    ModelState.AddModelError("", $"No se pudo actualizar el usuario (API). {err}");
+                    return View(u);
+                }
+            }
+
+            TempData["Mensaje"] = "Usuario actualizado correctamente.";
+            return RedirectToAction("Index");
+        }
+
+        // DELETE
+        [HttpGet]
+        public async Task<ActionResult> Eliminar(int id)
+        {
+            using (var api = new ApiClient())
+            {
+                var resp = await api.DeleteAsync($"api/usuarios/{id}");
+                if (!resp.IsSuccessStatusCode)
+                    TempData["Error"] = "No se pudo eliminar el usuario (API).";
+                else
+                    TempData["Mensaje"] = "Usuario eliminado.";
+            }
+            return RedirectToAction("Index");
+        }
+
+        // PERFIL (usa el tipo de Arca.Shared)
+        [HttpGet]
         public ActionResult Perfil()
         {
-            var user = Session["UsuarioLogueado"] as Usuario;
+            var user = Session["UsuarioLogueado"] as Usuario; // <-- Arca.Shared.Models.Usuario
             if (user == null)
                 return RedirectToAction("Index", "Home");
 

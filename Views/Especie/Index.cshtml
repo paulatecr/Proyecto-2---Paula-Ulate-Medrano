@@ -4,7 +4,7 @@
 
 @{
     ViewBag.Title = "Gestión de Especies";
-    var usuarioSesion = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
+    var usuarioSesion = Session["UsuarioLogueado"] as Arca.Shared.Models.Usuario;
     bool puedeEditar = usuarioSesion != null && usuarioSesion.Rol == "Administrador";
 
 }

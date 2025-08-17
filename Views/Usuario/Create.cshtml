@@ -1,5 +1,5 @@
 ﻿
-@model Proyecto_2___Paula_Ulate_Medrano.Models.Usuario
+@model Arca.Shared.Models.Usuario
 
 @{
     ViewBag.Title = "Create";
@@ -9,8 +9,8 @@
 {
     <div class="form-container">
         <h1>Crear Usuario</h1>
-        <label for="UserId">Usuario ID:</label>
-        @Html.TextBoxFor(m => m.UserID, new { required = "required" })
+        <label for="UserId">Usuario Id:</label>
+        @Html.TextBoxFor(m => m.UserId, new { required = "required" })
 
         <label for="Nombre">Nombre:</label>
         @Html.TextBoxFor(m => m.Nombre, new { required = "required" })

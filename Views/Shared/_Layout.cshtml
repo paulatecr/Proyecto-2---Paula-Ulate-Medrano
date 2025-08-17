@@ -1,4 +1,12 @@
-﻿
+﻿@using Arca.Shared.Models
+@{
+
+    // Usuario de sesión
+    var usuario = Session["UsuarioLogueado"] as Usuario;
+    var logged = usuario != null;
+    var rol = logged ? (usuario.Rol ?? "").Trim().ToLowerInvariant() : "";
+
+}
 
 <!DOCTYPE html>
 <html>
@@ -10,27 +18,24 @@
     @Styles.Render("~/Content/css")
     <link href="~/Content/Style.css" rel="stylesheet" />
     @Scripts.Render("~/bundles/modernizr")
-    @using Proyecto_2___Paula_Ulate_Medrano.Models
-    @{
-        var user = Session["UsuarioLogueado"] as Proyecto_2___Paula_Ulate_Medrano.Models.Usuario;
-    }
+
+
 </head>
 <body>
-
     <header>
         <nav class="navbar">
             <div class="navbar-container">
                 <span class="titulo-navbar">Proyecto 2 - Paula Ulate</span>
 
                 <ul class="menu-navbar">
-                    @if (user == null)
+                    @if (usuario == null)
                     {
                         <li>@Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link" })</li>
                         <li>@Html.ActionLink("Contacto", "Contact", "Home", null, new { @class = "nav-link" })</li>
                     }
                     else
                     {
-                        if (user.Rol == "Administrador")
+                        if (usuario.Rol == "Administrador")
                         {
                             <li>@Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Perfil Usuario", "Perfil", "Usuario", null, new { @class = "nav-link" })</li>
@@ -44,7 +49,7 @@
                             <li>@Html.ActionLink("Cerrar sesión", "CerrarSesion", "Home", null, new { @class = "nav-link" })</li>
                         }
 
-                        if (user.Rol == "Usuario")
+                        if (usuario.Rol == "Usuario")
                         {
                             <li>@Html.ActionLink("Inicio", "Index", "Home", null, new { @class = "nav-link" })</li>
                             <li>@Html.ActionLink("Perfil Usuario", "Perfil", "Usuario", null, new { @class = "nav-link" })</li>
@@ -59,6 +64,19 @@
 
                     }
                 </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                @if (logged)
+                {
+                    <li class="user-info">
+                        <span class="navbar-text">
+                            Hola, <strong>@(usuario.Nombre ?? usuario.UserId)</strong>
+                            <small>(@usuario.Rol)</small>
+                        </span>
+                    </li>          
+                }
+
+            </ul>
             </div>
         </nav>
     </header>
@@ -71,9 +89,8 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
-
